@@ -1,1 +1,1190 @@
-En esta carpeta debes copiar los ficheros de enunciados y editarlos aquí. De esta forma, siempre tendrás los originales intactos.
+TEMA 1. Clases y objetos
+1. ¿Cuáles son las cuatro características básicas de la programación orientada a objetos? Describe brevemente cada una
+Respuesta
+
+Los 4 Pilares de la Programación Orientada a Objetos
+
+1. Abstracción
+🔹 Definición: Representar en una clase solo los atributos y comportamientos esenciales de un objeto real, ocultando los detalles innecesarios.
+
+💡 Ejemplo:
+Al modelar un Coche, nos quedamos con marca, modelo y arrancar(), pero ignoramos detalles como el material de cada tornillo.
+
+public class Coche {
+    private String marca;      // Esencial
+    private String modelo;     // Esencial
+    
+    public void arrancar() {   // Comportamiento relevante
+        System.out.println("¡Brum brum!");
+    }
+}
+
+⚠️ Clave: Enfócate en el "qué hace" y no en el "cómo lo hace internamente".
+
+2. Encapsulamiento
+🔹 Definición: Ocultar el estado interno de un objeto y permitir acceso controlado mediante métodos públicos (getters/setters).
+
+💡 Ejemplo:
+
+public class Persona {
+    private int edad; // 🔒 Atributo privado
+    
+    // Acceso controlado
+    public int getEdad() {
+        return edad;
+    }
+    
+    public void setEdad(int nuevaEdad) {
+        if (nuevaEdad >= 0) { // ✅ Validación
+            this.edad = nuevaEdad;
+        }
+    }
+}
+
+⚠️ Beneficio: Protege la integridad de los datos y evita modificaciones indebidas.
+
+3. Herencia
+🔹 Definición: Mecanismo que permite que una clase (hija/subclase) herede atributos y métodos de otra clase (padre/superclase). Promueve la reutilización de código.
+
+💡 Ejemplo:
+
+class Animal {
+    void comer() {
+        System.out.println("Comiendo...");
+    }
+}
+
+class Perro extends Animal { // 🐕 Hereda de Animal
+    void ladrar() {
+        System.out.println("¡Guau!");
+    }
+}
+
+⚠️ Relación: Se modela con "es un" → Perro es un Animal.
+
+4. Polimorfismo
+🔹 Definición: La capacidad de un objeto de tomar diferentes formas. En Java se manifiesta principalmente mediante:
+Sobrecarga (overloading): Mismo nombre, distinta firma.
+Sobreescritura (overriding): Redefinir un método en una subclase.
+
+💡 Ejemplo (sobreescritura):
+
+class Animal {
+    void hacerSonido() {
+        System.out.println("Sonido genérico");
+    }
+}
+
+class Gato extends Animal {
+    @Override
+    void hacerSonido() { // 🐱 Comportamiento específico
+        System.out.println("¡Miau!");
+    }
+}
+
+// Uso
+Animal miMascota = new Gato();
+miMascota.hacerSonido(); // Salida: ¡Miau!
+
+⚠️ Clave: El tipo de referencia (Animal) y el objeto real (Gato) pueden ser distintos → comportamiento dinámico en tiempo de ejecución.
+
+2. Cita cuatro lenguajes populares que permitan la programación orientada a objetos
+Respuesta
+
+Cuatro lenguajes populares que permiten programación orientada a objetos:
+
+Java: 
+Lenguaje estático y compilado que sigue el paradigma POO de forma estricta. Casi todo son objetos y se ejecuta en la Máquina Virtual de Java (JVM). Muy utilizado en desarrollo empresarial y Android.
+
+C++: 
+Lenguaje multiparadigma que extiende C con características orientadas a objetos (clases, herencia, polimorfismo). No obliga a usar POO, pero lo soporta completamente. Empleado en sistemas, videojuegos y aplicaciones de alto rendimiento.
+
+Python: 
+Lenguaje dinámico e interpretado donde todo es un objeto. Soporta POO pero también permite programación procedural o funcional. Muy popular en ciencia de datos, inteligencia artificial y scripting.
+
+C#: 
+Lenguaje desarrollado por Microsoft con sintaxis similar a Java. Orientado a objetos por diseño y ejecutado sobre la plataforma .NET. Ampliamente usado en aplicaciones Windows, desarrollo web con ASP.NET y videojuegos con Unity.
+
+3. Los paradigmas anteriores a la POO, ¿Qué es la programación estructurada? y, todavía mejor, ¿Qué es la programación modular?
+Respuesta
+
+Programación Estructurada
+
+Es un paradigma surgido en los años 60-70 (con Edsger Dijkstra como figura clave) que propone organizar el código mediante tres estructuras de control bien definidas:
+
+Secuencia: ejecución lineal de instrucciones.
+Selección: decisiones mediante if, switch, etc.
+Iteración: bucles mediante for, while, etc.
+
+🔹 Objetivo: 
+Eliminar el uso descontrolado de la instrucción goto para evitar el "código espagueti" y mejorar la legibilidad, mantenibilidad y razonamiento lógico del programa.
+
+🔹 Principio clave: 
+Un programa debe tener un único punto de entrada y un único punto de salida.
+
+Programación Modular
+Es una evolución de la programación estructurada que propone dividir un programa grande en módulos independientes y cohesivos.
+
+🔹 Definición: 
+Un módulo es una unidad de código con una funcionalidad específica, con interfaz clara (entrada/salida) y ocultación de su implementación interna.
+
+🔹 Objetivos:
+Reutilización: Un módulo se puede usar en distintos programas.
+Mantenibilidad: Corregir o mejorar un módulo no afecta al resto.
+Desarrollo en equipo: Distintos programadores pueden trabajar en módulos diferentes simultáneamente.
+Abstracción: El usuario del módulo solo necesita conocer qué hace, no cómo lo hace.
+
+🔹 Relación con POO: 
+La programación modular es un precursor directo del encapsulamiento en POO. Las clases en POO son, en esencia, módulos avanzados que agrupan datos y comportamiento.
+
+4. ¿Qué tres elementos definen a un objeto en programación orientada a objetos?
+Respuesta
+
+Todo objeto en programación orientada a objetos se define por tres elementos fundamentales:
+>Estado
+Conjunto de valores que describen las características del objeto en un momento dado. Se almacena en los atributos (también llamados campos o propiedades) de la clase. El estado puede cambiar a lo largo de la vida del objeto mediante operaciones.
+
+>Comportamiento
+Conjunto de acciones u operaciones que el objeto puede realizar o que se pueden realizar sobre él. Se define mediante los métodos de la clase. El comportamiento determina cómo responde el objeto a los mensajes que recibe y cómo modifica su propio estado.
+
+>Identidad
+Característica que distingue a un objeto de cualquier otro, incluso si comparten el mismo estado y comportamiento. Cada objeto tiene una identidad única que lo hace reconocible e individual. En Java, esta identidad está asociada a la referencia del objeto en memoria (aunque el programador no accede directamente a la dirección de memoria).
+
+5. ¿Qué es una clase? ¿Es lo mismo que un objeto? ¿Qué es una instancia? ¿Todos los lenguajes orientados a objetos manejan el concepto de clase?
+Respuesta
+
+¿Qué es una clase?
+
+Una clase es una plantilla o modelo abstracto que define:
+Los atributos (características/estado) que tendrán los objetos.
+Los métodos (comportamiento/acciones) que podrán realizar los objetos.
+Es una descripción general, no un elemento concreto del programa.
+
+¿Es lo mismo una clase que un objeto?
+
+No. Son conceptos distintos:
+La clase es la plantilla o molde (definición abstracta).
+El objeto es un elemento concreto creado a partir de esa plantilla, con valores reales en sus atributos y capacidad para ejecutar sus métodos.
+Analogía:
+La clase es como los planos de una casa.
+El objeto es la casa construida a partir de esos planos.
+
+¿Qué es una instancia?
+
+Una instancia es el resultado de crear un objeto a partir de una clase. El proceso se llama instanciación.
+En Java se usa el operador new:
+
+// Clase (plantilla)
+class Coche {
+    String marca;
+    int velocidad;
+    
+    void acelerar() {
+        velocidad += 10;
+    }
+}
+// Instanciación: crear un objeto/instancia de la clase Coche
+Coche miCoche = new Coche();  // miCoche es una instancia
+miCoche.marca = "Toyota";
+miCoche.acelerar();
+
+Cada instancia tiene su propio estado independiente del resto de instancias.
+
+¿Todos los lenguajes orientados a objetos manejan el concepto de clase?
+
+No. Existen dos grandes enfoques:
+Lenguajes basados en clases (class-based):
+Usan clases como plantillas para crear objetos.
+Ejemplos: Java, C++, C#, Python, Ruby.
+
+Lenguajes basados en prototipos (prototype-based):
+No existen clases. Los objetos se crean a partir de otros objetos existentes (prototipos), heredando directamente sus propiedades.
+Ejemplo principal: JavaScript.
+En JavaScript:
+
+// No hay clase, se usa un objeto prototipo
+const cochePrototipo = {
+    marca: "",
+    acelerar() { console.log("Acelerando"); }
+};
+
+// Crear un nuevo objeto basado en el prototipo
+const miCoche = Object.create(cochePrototipo);
+miCoche.marca = "Toyota";
+
+6. ¿Dónde se almacenan en memoria los objetos? ¿Es igual en todos los lenguajes? ¿Qué es la recolección de basura?
+Respuesta
+
+¿Dónde se almacenan los objetos en memoria?
+
+En lenguajes como Java, los objetos se almacenan en el heap (montículo), una zona de memoria dinámica gestionada por la máquina virtual.
+Heap: 
+Almacena los objetos creados con new. Es compartido por todo el programa y tiene mayor tamaño pero acceso más lento.
+Stack (pila): Almacena las referencias a los objetos (variables que apuntan al heap) y los tipos primitivos locales. Es rápido pero limitado en tamaño y duración (vida ligada al método).
+java
+
+public class Ejemplo {
+    public void metodo() {
+        int numero = 5;              // 'numero' → stack (primitivo)
+        Persona p = new Persona();   // 'p' → stack (referencia)
+                                     // new Persona() → heap (objeto real)
+    }
+}
+
+¿Es igual en todos los lenguajes?
+
+No. La gestión de memoria varía según el lenguaje:
+Java, C#, Python, Ruby: Los objetos siempre van al heap. La memoria se gestiona automáticamente mediante recolección de basura.
+C++: El programador decide:
+Persona p; → objeto en stack (destruido al salir del ámbito).
+Persona* p = new Persona(); → objeto en heap (destrucción manual con delete).
+JavaScript: Los objetos se almacenan en el heap, pero el programador no tiene control directo sobre la memoria.
+
+¿Qué es la recolección de basura?
+
+La recolección de basura (garbage collection, GC) es un mecanismo automático que libera la memoria ocupada por objetos que ya no son accesibles por el programa (objetos "huérfanos").
+🔹 Cómo funciona (simplificado):
+El recolector identifica objetos del heap a los que ninguna referencia activa apunta y los elimina para liberar memoria.
+🔹 Ventaja: 
+Evita fugas de memoria y errores comunes de gestión manual (dangling pointers, double free).
+🔹 Desventaja: 
+Introduce pausas impredecibles (stop-the-world) y consume recursos de CPU.
+🔹 En Java:
+La JVM ejecuta el GC de forma automática en segundo plano. No se puede forzar su ejecución, aunque se puede sugerir con System.gc() (no garantiza ejecución inmediata).
+>>
+Persona p = new Persona();
+p = null;  // El objeto original ya no es accesible → candidato a GC
+
+💡 Nota clave
+
+Heap → objetos (vida dinámica, gestión automática o manual).
+Stack → referencias y primitivos locales (vida ligada al método).
+GC → mecanismo automático de limpieza de memoria (Java, C#, Python...).
+C/C++ → sin GC; el programador gestiona manualmente la memoria del heap.
+
+7. ¿Qué es un método? ¿Qué es la sobrecarga de métodos?
+Respuesta
+
+¿Qué es un método?
+
+Un método es un bloque de código que define un comportamiento o una operación que puede realizar un objeto (o una clase). Agrupa un conjunto de instrucciones bajo un nombre para poder reutilizarlas.
+🔹 Elementos de un método en Java:
+Modificador de acceso (public, private, protected, por defecto)
+Tipo de retorno (void si no devuelve nada, o un tipo de dato)
+Nombre del método
+Lista de parámetros (entre paréntesis, puede estar vacía)
+Cuerpo del método (instrucciones entre llaves {})
+
+// Ejemplo de método
+public class Calculadora {
+    // Método que devuelve un valor (int)
+    public int sumar(int a, int b) {
+        return a + b;
+    }
+    
+    // Método void (no devuelve nada)
+    public void mostrarMensaje(String mensaje) {
+        System.out.println(mensaje);
+    }
+}
+⚠️ Nota: Los métodos definen el comportamiento de los objetos. Sin métodos, un objeto solo tendría estado (datos) pero no podría hacer nada.
+
+¿Qué es la sobrecarga de métodos?
+
+La sobrecarga de métodos (method overloading) consiste en definir varios métodos con el mismo nombre pero con distinta lista de parámetros (en tipo, número u orden) dentro de la misma clase.
+🔹 Reglas clave:
+✅ Diferente número de parámetros.
+✅ Diferente tipo de parámetros.
+✅ Diferente orden de tipos de parámetros.
+❌ No basta con cambiar solo el tipo de retorno → error de compilación.
+
+public class Calculadora {
+    // Sobrecarga 1: dos enteros
+    public int sumar(int a, int b) {
+        return a + b;
+    }
+    
+    // Sobrecarga 2: tres enteros
+    public int sumar(int a, int b, int c) {
+        return a + b + c;
+    }
+    
+    // Sobrecarga 3: dos doubles
+    public double sumar(double a, double b) {
+        return a + b;
+    }
+    
+    // Sobrecarga 4: int y double (orden importa)
+    public double sumar(int a, double b) {
+        return a + b;
+    }
+    
+    // Sobrecarga 5: double e int (distinto de la anterior por orden)
+    public double sumar(double a, int b) {
+        return a + b;
+    }
+}
+
+🔹 ¿Cómo decide Java qué método usar?
+El compilador elige el método adecuado en tiempo de compilación según los tipos y número de argumentos pasados al invocar el método (resolución estática).
+
+Calculadora calc = new Calculadora();
+calc.sumar(2, 3);        // Llama a sumar(int, int)
+calc.sumar(2, 3, 4);     // Llama a sumar(int, int, int)
+calc.sumar(2.5, 3.1);    // Llama a sumar(double, double)
+
+⚠️ No confundir con sobreescritura (overriding):
+Sobrecarga: mismo nombre, distinta firma → dentro de la misma clase (o clase hija sin @Override).
+Sobreescritura: mismo nombre y misma firma → en una clase hija que redefine un método heredado (usa @Override).
+
+8. Ejemplo mínimo de clase en Java, que se llame Punto, con dos atributos, x e y, con un método que se llame calculaDistanciaAOrigen, que calcule la distancia a la posición 0,0. Por sencillez, los atributos deben tener visibilidad por defecto. Crea además un ejemplo de uso con una instancia y uso del método
+Respuesta
+
+Ejemplo mínimo de clase en Java
+
+// Clase Punto
+class Punto {
+    // Atributos con visibilidad por defecto (package-private)
+    double x;
+    double y;
+    
+    // Constructor para inicializar los atributos
+    Punto(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
+    
+    // Método que calcula la distancia al origen (0,0)
+    double calculaDistanciaAOrigen() {
+        return Math.sqrt(x * x + y * y);
+    }
+}
+
+// Clase de prueba con método main
+public class PruebaPunto {
+    public static void main(String[] args) {
+        // Crear una instancia de Punto
+        Punto p = new Punto(3.0, 4.0);
+        
+        // Usar el método
+        double distancia = p.calculaDistanciaAOrigen();
+        
+        // Mostrar resultado
+        System.out.println("Punto: (" + p.x + ", " + p.y + ")");
+        System.out.println("Distancia al origen: " + distancia);
+        // Salida esperada: Distancia al origen: 5.0
+    }
+}
+
+💡 Notas clave
+Visibilidad por defecto: 
+Al no usar public, private ni protected, los atributos x e y son accesibles desde cualquier clase del mismo paquete.
+Fórmula usada: 
+Distancia = √(x² + y²) → implementada con Math.sqrt().
+Constructor: 
+Necesario para inicializar los atributos al crear la instancia (new Punto(3.0, 4.0)).
+Ejecución: 
+Guarda el código en un archivo PruebaPunto.java y compila/ejecuta con:
+javac PruebaPunto.java
+java PruebaPunto
+
+9. ¿Cuál es el punto de entrada en un programa en Java? ¿Qué es static y para qué vale? ¿Sólo se emplea para ese método main? ¿Para qué se combina con final?
+Respuesta
+
+Punto de entrada en Java
+El punto de entrada de todo programa Java es el método main con esta firma exacta:
+
+public static void main(String[] args) {
+    // Código del programa
+}
+
+🔹 Requisitos obligatorios:
+Debe ser public (accesible desde la JVM).
+Debe ser static (explicado a continuación).
+Debe devolver void.
+Debe llamarse exactamente main.
+Debe recibir un array de String como parámetro (String[] args o String... args).
+
+Sin este método, la JVM no puede iniciar la ejecución del programa (a excepción de entornos especiales como módulos Java 9+ con module-info.java).
+
+¿Qué es static y para qué sirve?
+
+static es un modificador que indica que un miembro (atributo, método, bloque o clase anidada) pertenece a la clase, no a las instancias de la clase.
+🔹 Diferencias clave:
+
+class Ejemplo {
+    // Atributo de instancia: cada objeto tiene su propia copia
+    int contador;
+    
+    // Atributo estático: compartido por TODAS las instancias
+    static int contadorGlobal;
+    
+    // Método de instancia: necesita un objeto para invocarse
+    void metodoInstancia() {
+        contador++;          // Accede a atributo de instancia
+        contadorGlobal++;    // También puede acceder a estáticos
+    }
+    
+    // Método estático: se invoca SIN necesidad de crear un objeto
+    static void metodoEstatico() {
+        contadorGlobal++;    // ✅ Puede acceder a estáticos
+        // contador++;       // ❌ ERROR: no puede acceder a no-estáticos
+    }
+}
+
+🔹 Uso del método main:
+Debe ser static porque la JVM lo invoca antes de que exista cualquier objeto de la clase. No hay instancia disponible al inicio del programa.
+
+// Invocación por la JVM (sin crear objeto):
+MiClase.main(args);
+
+¿Sólo se usa static para el método main?
+
+No. static se usa en múltiples contextos:
+Métodos de utilidad:
+Clases como Math o Arrays contienen solo métodos estáticos porque no necesitan estado:
+
+
+Math.sqrt(16);      // No se crea un objeto Math
+Arrays.sort(miArray);
+
+Constantes de clase:
+Atributos "static final" que representan valores fijos compartidos:
+
+public static final double PI = 3.14159;
+
+Contadores globales:
+Para llevar un conteo compartido entre todas las instancias:
+
+private static int numeroTotalObjetos = 0;
+
+Bloques estáticos:
+Inicialización de recursos al cargar la clase:
+
+static {
+    // Código ejecutado una sola vez al cargar la clase
+    System.out.println("Clase cargada");
+}
+
+Clases anidadas estáticas:
+Clases internas que no dependen de la instancia externa.
+
+Combinación: static final
+Esta combinación se usa principalmente para definir constantes de clase:
+
+static: el valor es compartido por todas las instancias (pertenece a la clase).
+final: el valor no puede modificarse después de su inicialización.
+
+public class Configuracion {
+    // Constante de clase: accesible sin instanciar y no modificable
+    public static final int PUERTO_SERVIDOR = 8080;
+    public static final String NOMBRE_APP = "MiAplicacion";
+}
+
+🔹 Convenciones:
+Los nombres de constantes se escriben en MAYÚSCULAS con guiones bajos.
+Se inicializan en la declaración o en un bloque estático.
+
+public static final double IVA;
+static {
+    IVA = 0.21; // Inicialización en bloque estático
+}
+
+⚠️ Importante:
+"static" ≠ "final": uno indica pertenencia a la clase, el otro inmutabilidad.
+Pueden usarse por separado:
+"static" sin "final": variable de clase modificable.
+"final" sin "static": atributo de instancia inmutable (cada objeto tiene su propia copia constante).
+
+💡 Resumen clave
+Punto de entrada: 
+public static void main(String[] args)
+static: 
+Miembro de la clase, no de la instancia. Accesible sin crear objetos.
+Usos frecuentes: 
+main, métodos de utilidad, constantes, contadores globales.
+static final: 
+Define constantes de clase inmutables y compartidas.
+
+10. Intenta ejecutar un poco de Java de forma básica, con los comandos javac y java. ¿Cómo podemos compilar el programa y ejecutarlo desde linea de comandos? ¿Java es compilado? ¿Qué es la máquina virtual? ¿Qué es el byte-code y los ficheros .class?
+Respuesta
+
+Compilar y ejecutar desde línea de comandos
+
+Paso 1: Escribir el código fuente
+Crear un archivo con extensión .java. El nombre del archivo debe coincidir con el nombre de la clase public:
+
+// HolaMundo.java
+public class HolaMundo {
+    public static void main(String[] args) {
+        System.out.println("¡Hola, mundo!");
+    }
+} 
+
+Paso 2: Compilar con javac
+
+javac HolaMundo.java
+
+>Genera un archivo HolaMundo.class en el mismo directorio.
+>Si hay errores de sintaxis, el compilador los muestra y no genera el .class.
+
+Paso 3: Ejecutar con java
+
+java HolaMundo
+
+⚠️ Importante: 
+Se indica el nombre de la clase, sin la extensión ".class".
+La JVM carga el bytecode y ejecuta el método "main".
+
+¿Java es compilado o interpretado?
+
+Java es compilado a bytecode, no a código máquina nativo. El proceso tiene dos fases:
+1. Compilación (javac):
+El código fuente (.java) → bytecode (.class).
+2. Ejecución (java):
+La JVM interpreta (o compila JIT) el bytecode → código máquina nativo en tiempo de ejecución.
+
+✅ Ventaja: "Escribe una vez, ejecuta en cualquier sitio" (Write Once, Run Anywhere).
+
+¿Qué es la Máquina Virtual de Java (JVM)?
+
+La JVM (Java Virtual Machine) es un entorno de ejecución que:
+Carga los ficheros .class (bytecode).
+Verifica su integridad y seguridad.
+Ejecuta el bytecode, bien interpretándolo o compilándolo a código nativo mediante JIT (Just-In-Time Compiler).
+Gestiona memoria automática (recolección de basura).
+Es específica de cada sistema operativo y arquitectura.
+
+🔹 Clave: 
+El programador compila una sola vez; la JVM se encarga de adaptar la ejecución a cualquier plataforma.
+
+¿Qué es el bytecode y los ficheros .class?
+
+Bytecode:
+Código intermedio independiente de la plataforma, generado por el compilador javac. No es código máquina, sino un lenguaje de bajo nivel entendido únicamente por la JVM.
+
+Ficheros .class:
+Contienen el bytecode de una clase Java. Son binarios (no legibles directamente) y portables a cualquier sistema con JVM instalada.
+
+# Estructura típica después de compilar
+mi-proyecto/
+├── HolaMundo.java   ← código fuente (texto legible)
+└── HolaMundo.class  ← bytecode (binario, para la JVM)
+
+⚠️ Nota: Los ficheros .class no son ejecutables por el sistema operativo; solo la JVM puede ejecutarlos.
+
+💡 Resumen clave
+javac
+Compilador: .java → .class (bytecode)
+
+java
+Lanza la JVM para ejecutar el bytecode
+
+Bytecode
+Código intermedio independiente de la plataforma
+
+.class
+Fichero binario que contiene el bytecode
+
+JVM
+Máquina virtual que ejecuta el bytecode en cualquier sistema
+
+Portabilidad
+Mismo .class funciona en Windows, Linux, macOS, etc.
+
+🔍 Comandos útiles adicionales:
+
+javac -version    # Ver versión del compilador
+java -version     # Ver versión de la JVM instalada
+javac *.java      # Compilar todos los .java del directorio actual
+java MiClase arg1 arg2  # Pasar argumentos al método main (args[0], args[1]...)
+
+11. En el código anterior de la clase Punto ¿Qué es new? ¿Qué es un constructor? Pon un ejemplo de constructor en una clase Empleado que tenga DNI, nombre y apellidos
+Respuesta
+
+¿Qué es new?
+
+new es un operador que realiza tres acciones fundamentales:
+Reserva memoria en el heap para el nuevo objeto.
+Invoca al constructor de la clase para inicializar el estado del objeto.
+Devuelve una referencia al objeto recién creado (dirección de memoria).
+
+Punto p = new Punto(3.0, 4.0);
+//         ↑↑↑
+//         1. Reserva memoria para un Punto
+//         2. Llama al constructor Punto(double, double)
+//         3. Devuelve la referencia al objeto creado
+
+⚠️ Sin new no hay objeto real, solo hay una variable de referencia que apunta a null.
+
+¿Qué es un constructor?
+
+Un constructor es un método especial que:
+Tiene exactamente el mismo nombre que la clase.
+No tiene tipo de retorno (ni siquiera void).
+Se ejecuta automáticamente al crear un objeto con new.
+Sirve para inicializar el estado del objeto (asignar valores iniciales a los atributos).
+
+🔹 Tipos de constructores:
+
+Constructor por defecto:
+Si no defines ningún constructor, el compilador genera uno sin parámetros que no hace nada:
+
+public Punto() { } // Generado automáticamente si no hay otros constructores
+
+Constructor parametrizado:
+Define parámetros para inicializar los atributos al crear el objeto:
+
+public Punto(double x, double y) {
+    this.x = x;
+    this.y = y;
+}
+
+⚠️ Regla importante:
+Si defines al menos un constructor explícito, el compilador ya no genera el constructor por defecto automáticamente.
+
+Ejemplo: Clase Empleado con constructor
+
+class Empleado {
+    // Atributos
+    String dni;
+    String nombre;
+    String apellidos;
+    
+    // Constructor parametrizado
+    Empleado(String dni, String nombre, String apellidos) {
+        this.dni = dni;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+    }
+    
+    // Método para mostrar los datos del empleado
+    void mostrarDatos() {
+        System.out.println("DNI: " + dni);
+        System.out.println("Nombre completo: " + nombre + " " + apellidos);
+    }
+}
+
+// Clase de prueba
+public class PruebaEmpleado {
+    public static void main(String[] args) {
+        // Crear una instancia usando new + constructor
+        Empleado emp = new Empleado("12345678A", "Ana", "García López");
+        
+        // Usar el objeto
+        emp.mostrarDatos();
+    }
+}
+
+💡 Resumen clave
+
+>new
+Operador que reserva memoria, invoca al constructor y devuelve una referencia.
+
+>Constructor
+Método especial sin retorno que inicializa el estado de un objeto al crearse.
+
+>this
+Hace referencia al objeto actual; útil para diferenciar parámetros de atributos.
+
+>Sin constructor explícito
+El compilador genera uno por defecto (sin parámetros).
+
+>Con constructor explícito
+El constructor por defecto desaparece a menos que lo definas tú.
+
+12. ¿Qué es la referencia this? ¿Se llama igual en todos los lenguajes? Pon un ejemplo del uso de this en la clase Punto
+Respuesta
+
+Referencia this en Java
+
+¿Qué es this?
+
+this es una referencia implícita que apunta al objeto actual sobre el que se está ejecutando un método o constructor. Es una palabra reservada que solo existe dentro de métodos y constructores de instancia (no en métodos static).
+
+🔹 Usos principales de this:
+Diferenciar atributos de parámetros locales cuando tienen el mismo nombre:
+
+this.atributo = parametro;
+
+Invocar a otro constructor de la misma clase (debe ser la primera instrucción del constructor):
+
+this(otrosParametros);
+
+Devolver la referencia al objeto actual desde un método:
+
+return this;
+
+Pasar el objeto actual como argumento a otro método:
+
+otroMetodo(this);
+
+⚠️ Importante: this no existe en métodos static porque estos pertenecen a la clase, no a una instancia concreta.
+
+¿Se llama igual en todos los lenguajes?
+
+No. La referencia al objeto actual varía según el lenguaje:
+
+Java, C++, C#
+this
+
+Python
+self (como primer parámetro explícito)
+
+JavaScript
+this (comportamiento más complejo, depende del contexto)
+
+Ruby
+self
+
+PHP
+$this
+
+Kotlin
+this
+
+Ejemplo: Uso de this en la clase Punto
+
+class Punto {
+    double x;
+    double y;
+    
+    // Constructor usando 'this' para diferenciar parámetros de atributos
+    Punto(double x, double y) {
+        this.x = x;   // this.x → atributo | x → parámetro
+        this.y = y;   // this.y → atributo | y → parámetro
+    }
+    
+
+💡 Resumen clave
+
+this → referencia al objeto actual dentro de métodos/constructores de instancia.
+No usable en métodos static (no hay objeto asociado).
+No es universal: otros lenguajes usan self, $this, etc.
+Casos de uso frecuentes: resolver ambigüedad nombre, delegar constructores, encadenar métodos.
+
+13. Añade ahora otro nuevo método que se llame distanciaA, que reciba un Punto como parámetro y calcule la distancia entre this y el punto proporcionado
+Respuesta
+
+Método distanciaA en la clase Punto
+
+class Punto {
+    double x;
+    double y;
+    
+    // Constructor
+    Punto(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
+    
+
+💡 Notas clave
+
+Fórmula utilizada:
+distancia = √[(x₂ - x₁)² + (y₂ - y₁)²]
+
+Uso de this:
+this.x y this.y representan las coordenadas del punto actual sobre el que se invoca el método. otro.x y otro.y son las coordenadas del punto recibido como parámetro.
+
+Simetría:
+La distancia es simétrica: p1.distanciaA(p2) = p2.distanciaA(p1).
+
+Reutilización:
+El método calculaDistanciaAOrigen() podría reescribirse usando distanciaA():
+
+double calculaDistanciaAOrigen() {
+    return this.distanciaA(new Punto(0.0, 0.0));
+}
+
+⚠️ Importante: El parámetro otro es una referencia a otro objeto Punto. Si se pasara null, se produciría un NullPointerException al acceder a otro.x o otro.y. En código robusto, se debería validar:
+
+if (otro == null) {
+    throw new IllegalArgumentException("El punto no puede ser null");
+}
+
+14. El paso del Punto como parámetro a un método, es por copia o por referencia, es decir, si se cambia el valor de algún atributo del punto pasado como parámetro, dichos cambios afectan al objeto fuera del método? ¿Qué ocurre si en vez de un Punto, se recibiese un entero (int) y dicho entero se modificase dentro de la función?
+Respuesta
+
+ Paso de parámetros en Java – ¿Por valor o por referencia?
+
+Concepto fundamental
+Java siempre pasa parámetros por valor (pass-by-value), nunca por referencia en el sentido estricto del término. Sin embargo, el comportamiento difiere según el tipo de dato:
+>>
+Primitivos (int, double...)
+El valor literal
+❌ No
+>>
+Objetos (Punto, String...)
+El valor de la referencia (dirección de memoria)
+✅ Sí, si modificas sus atributos
+>>
+❌ No, si reasignas la referencia
+
+Caso 1: Paso de un objeto (Punto)
+
+class Punto {
+    double x, y;
+    
+    Punto(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
+    
+    void modificarDentro(Punto p) {
+        p.x = 100;      // ✅ Modifica el atributo del objeto real
+
+🔹 Explicación:
+Al llamar a modificarDentro(p1), Java copia el valor de la referencia p1 (es decir, la dirección de memoria del objeto).
+Dentro del método, p es una copia de esa referencia, pero ambas (p1 y p) apuntan al mismo objeto en el heap.
+Al modificar p.x o p.y, se altera el objeto real → cambios visibles fuera.
+Al hacer p = new Punto(...), solo se modifica la copia local p; p1 sigue apuntando al objeto original.
+
+Caso 2: Paso de un primitivo (int)
+
+class Ejemplo {
+    void modificarEntero(int n) {
+        n = n * 10;  // ❌ Modifica solo la copia local
+        System.out.println("Dentro del método: " + n); // 50
+    }
+}
+
+public class Prueba {
+    public static void main(String[] args) {
+        int numero = 5;
+
+🔹 Explicación:
+Se copia el valor literal 5 a la variable local n del método.
+Cualquier cambio sobre n afecta solo a esa copia local.
+La variable original numero permanece intacta.
+
+💡 Resumen visual
+
+
+Paso de objeto (Punto):
+main:  p1 ────────→ [Punto en heap: x=3, y=4]
+                    ↑
+método: p ──────────┘   ← copia de la referencia (misma dirección)
+       p.x = 100 → modifica el OBJETO REAL ✓
+
+Paso de primitivo (int):
+main:  numero = 5
+                    ↓
+método: n = 5       ← copia del valor
+
+
+⚠️ Error común
+
+❌ Mito: "Java pasa objetos por referencia".
+✅ Realidad: Java pasa el valor de la referencia por valor (pass-by-value of the reference). Es una diferencia sutil pero fundamental.
+
+🔑 Conclusión
+
+>Modificar atributos/valor interno
+✅ Sí afecta
+❌ No afecta
+
+>Reasignar la variable del método
+❌ No afecta
+❌ No afecta
+
+15. ¿Qué es el método toString() en Java? ¿Existe en otros lenguajes? Pon un ejemplo de toString() en la clase Punto en Java
+Respuesta
+
+Método toString() en Java
+
+¿Qué es toString()?
+
+toString() es un método heredado de la clase Object (la superclase de todas las clases en Java) que devuelve una representación textual del objeto. Su firma es:
+
+public String toString()
+
+🔹 Propósito:
+Proporcionar una cadena legible que describa el estado del objeto. Es útil para:
+Depuración (System.out.println(objeto))
+Logging
+Mostrar información al usuario
+
+🔹 Comportamiento por defecto:
+Si no se sobrescribe, toString() devuelve algo como:
+
+nombrePaquete.NombreClase@hashCodeHexadecimal
+// Ejemplo: Punto@1b6d3586
+
+¿Existe en otros lenguajes?
+
+Sí, aunque con nombres distintos:
+
+>Java
+toString()
+Heredado de Object
+
+>C#
+ToString()
+Heredado de Object
+
+>Python
+__str__() / __repr__()
+str(objeto) llama a __str__()
+
+>C++
+No estándar
+Se suele implementar manualmente
+
+>JavaScript
+toString()
+Disponible en muchos objetos nativos
+
+>Ruby
+to_s
+"to string"
+
+Ejemplo: toString() en la clase Punto
+
+class Punto {
+    double x;
+    double y;
+    
+    Punto(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
+    
+    // Sobrescritura de toString()
+    @Override
+    public String toString() {
+        return "(" + x + ", " + y + ")";
+    }
+    
+    double distanciaA(Punto otro) {
+        double dx = this.x - otro.x;
+        double dy = this.y - otro.y;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+}
+
+public class PruebaPunto {
+    public static void main(String[] args) {
+        Punto p1 = new Punto(3.0, 4.0);
+        Punto p2 = new Punto(6.0, 8.0);
+        
+        // Al imprimir un objeto, Java llama automáticamente a toString()
+        System.out.println(p1);           // Salida: (3.0, 4.0)
+        System.out.println(p2);           // Salida: (6.0, 8.0)
+        
+        // También se puede invocar explícitamente
+        System.out.println("Distancia entre " + p1.toString() + 
+                           " y " + p2.toString() + 
+                           ": " + p1.distanciaA(p2));
+        // Salida: Distancia entre (3.0, 4.0) y (6.0, 8.0): 5.0
+    }
+}
+
+💡 Notas clave
+
+@Override: Anotación opcional pero recomendada que indica que estás sobrescribiendo un método de una superclase. El compilador verifica que el método exista en la jerarquía.
+>Concatenación automática: 
+Cuando haces System.out.println(objeto), Java invoca internamente objeto.toString().
+>Buena práctica: 
+Un toString() bien implementado facilita enormemente la depuración y el mantenimiento del código.
+>Formato flexible: 
+Puedes personalizar el formato según tus necesidades (CSV, JSON, etc.).
+
+// Ejemplos alternativos de toString()
+return "Punto[x=" + x + ", y=" + y + "]";     // Más descriptivo
+return x + ";" + y;                           // Formato CSV
+return String.format("(%.2f, %.2f)", x, y);   // Formato con 2 decimales
+
+⚠️ Importante: toString() debe ser rápido y no tener efectos secundarios (no modificar el estado del objeto).
+
+16. Reflexiona: ¿una clase es como un struct en C? ¿Qué le falta al struct para ser como una clase y las variables de ese tipo ser instancias?
+Respuesta
+
+¿Es una clase como un struct en C?
+Semejanza superficial
+Sí, hay una similitud estructural básica: tanto una clase como un struct en C permiten agrupar varias variables relacionadas bajo un mismo tipo. Por ejemplo:
+
+C: 
+
+// Struct en C
+struct Punto {
+    double x;
+    double y;
+};
+
+Java: 
+
+// Clase en Java (mínima)
+class Punto {
+    double x;
+    double y;
+}
+
+En ambos casos creamos un tipo compuesto que representa una entidad con múltiples atributos.
+
+Diferencias fundamentales: ¿Qué le falta al struct?
+Un struct en C es solo una agrupación de datos. Para ser equivalente a una clase le faltan elementos esenciales del paradigma orientado a objetos:
+
+>>Comportamiento (métodos)
+Un struct no puede contener funciones. El comportamiento se define fuera del struct, como funciones independientes que reciben un puntero al struct:
+
+C:
+
+void mover(struct Punto* p, double dx, double dy) {
+    p->x += dx;
+    p->y += dy;
+}
+
+En una clase, los métodos están integrados en la definición del tipo y operan naturalmente sobre sus atributos.
+
+>>Encapsulamiento
+En C todos los campos de un struct son públicos por naturaleza. No existe un mecanismo nativo para ocultar datos o controlar el acceso (private, protected). En Java sí.
+
+>>Herencia y polimorfismo
+Un struct no puede heredar de otro ni formar jerarquías. Tampoco permite tratar objetos de tipos distintos a través de una interfaz común (polimorfismo).
+
+>>Constructores y destructores
+En C no hay inicialización automática al crear un struct. Debes inicializar manualmente cada campo. En Java los constructores garantizan que el objeto nazca en un estado válido.
+
+>>Identidad como tipo completo
+En C un struct es solo un contenedor de datos. En POO, una clase define una abstracción completa: qué es el objeto, qué sabe (estado) y qué hace (comportamiento).
+
+Visión histórica
+C++ nació precisamente para resolver esta limitación: añadir clases (y POO) a C. De hecho, en C++ un struct es técnicamente casi idéntico a una class, salvo que su visibilidad por defecto es public en lugar de private.
+En C puro se pueden simular algunos conceptos POO usando punteros a funciones dentro de structs, pero es una técnica manual, frágil y sin soporte del lenguaje.
+
+💡 Conclusión reflexiva
+
+Un struct en C es el germen estructural de una clase: permite agrupar datos relacionados. Pero una clase es una abstracción completa que une datos y comportamiento, protege su estado interno y permite relaciones dinámicas entre tipos (herencia, polimorfismo).
+
+🔹 struct → "¿Qué tiene este objeto?" (solo datos)
+🔹 Clase → "¿Qué es este objeto y qué puede hacer?" (datos + comportamiento + identidad)
+
+La evolución de struct a clase representa el salto de la organización de datos a la modelización de entidades del mundo real.
+
+17. Quitemos un poco de magia a todo esto: ¿Como se podría “emular”, con struct en C, la clase Punto, con su función para calcular la distancia al origen? ¿Qué ha pasado con this?
+Respuesta
+
+ Emulando una clase Java con struct en C – ¿Dónde está this?
+
+La "magia" destapada: this es un parámetro implícito
+
+En lenguajes orientados a objetos como Java, this no es magia: es simplemente un parámetro oculto que el compilador pasa automáticamente a cada método de instancia. El método recibe una referencia al objeto sobre el que se invoca.
+
+En C no hay magia: ese parámetro debe ser explícito.
+
+Emulación en C puro
+
+#include <stdio.h>
+#include <math.h>
+
+// 1. Definición del struct (solo datos)
+struct Punto {
+    double x;
+    double y;
+};
+
+// 2. Función "método" externa: recibe un PUNTERO al struct como primer parámetro
+//    ¡Este puntero ES el equivalente a 'this'!
+double calculaDistanciaAOrigen(struct Punto* this) {
+    return sqrt(this->x * this->x + this->y * this->y);
+}
+
+// 3. Otra función útil: distancia entre dos puntos
+double distanciaA(struct Punto* this, struct Punto* otro) {
+    double dx = this->x - otro->x;
+    double dy = this->y - otro->y;
+    return sqrt(dx * dx + dy * dy);
+}
+
+// 4. Ejemplo de uso
+int main() {
+    struct Punto p1 = {3.0, 4.0};
+    struct Punto p2 = {0.0, 0.0};
+    
+    // Llamada "manual" pasando explícitamente el objeto como primer argumento
+    double d1 = calculaDistanciaAOrigen(&p1);
+    printf("Distancia de p1 al origen: %.2f\n", d1);  // 5.00
+    
+    double d2 = distanciaA(&p1, &p2);
+    printf("Distancia entre p1 y p2: %.2f\n", d2);    // 5.00
+    
+    return 0;
+}
+
+¿Dónde está this?
+
+java: p1.distanciaA(p2)
+c: distanciaA(&p1, &p2)
+
+java: this se pasa implícitamente
+c: El puntero this se pasa explícitamente
+
+java: El compilador lo inyecta
+c: El programador lo escribe
+
+🔹 En Java:
+
+p1.distanciaA(p2);  // El compilador transforma internamente en:
+                    // distanciaA(this = p1, otro = p2)
+
+🔹 En C:
+
+distanciaA(&p1, &p2);  // Tú escribes explícitamente:
+                       // this = &p1, otro = &p2
+
+¿Se puede emular aún más? (Opcional: punteros a función)
+
+En C avanzado se pueden incluir punteros a función dentro del struct para simular métodos "vinculados":
+
+
+#include <stdio.h>
+#include <math.h>
+
+typedef struct Punto Punto;
+
+struct Punto {
+    double x;
+    double y;
+    // Puntero a función que actúa como "método"
+    double (*distanciaAOrigen)(Punto* this);
+};
+
+// Implementación de la "función-método"
+double metodo_distanciaAOrigen(Punto* this) {
+    return sqrt(this->x * this->x + this->y * this->y);
+}
+
+// Constructor manual
+Punto crearPunto(double x, double y) {
+    Punto p = {x, y, metodo_distanciaAOrigen};
+    return p;
+}
+
+int main() {
+    Punto p = crearPunto(3.0, 4.0);
+    
+    // ¡Parece un método! Pero sigue siendo una llamada explícita:
+    double d = p.distanciaAOrigen(&p);  // Aún debes pasar &p explícitamente
+    printf("Distancia: %.2f\n", d);
+    
+    return 0;
+}
+
+⚠️ Limitación: Aunque el puntero a función está dentro del struct, sigues necesitando pasar &p explícitamente. C no tiene sintaxis para ocultar ese parámetro como hace Java.
+
+💡 Conclusión clave
+
+this no es magia: 
+es un parámetro que en Java se pasa implícitamente y en C debes pasar explícitamente.
+
+Un struct es solo datos: 
+el comportamiento vive fuera, en funciones que reciben un puntero al struct.
+La POO automatiza lo que en C haces manualmente: 
+agrupar datos + pasar referencias implícitamente + sintaxis cómoda (objeto.metodo()).
+
+C++ nació para resolver esto: 
+añadió clases a C precisamente para evitar este "paso manual de this".
+
+🔍 Reflexión final: 
+La programación orientada a objetos no inventa nada nuevo a nivel de máquina. Solo automatiza y encapsula patrones que ya existían en lenguajes procedimentales como C. La "magia" es en realidad conveniencia sintáctica y organización conceptual.
