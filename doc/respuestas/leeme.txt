@@ -1,1 +1,885 @@
-En esta carpeta debes copiar los ficheros de enunciados y editarlos aquí. De esta forma, siempre tendrás los originales intactos.
+TEMA 2. Encapsulación
+1. En Programación Orientada a Objetos (POO), ¿Qué 
+buscan la encapsulación y la ocultación de información? 
+Enumera brevemente algunas ventajas de la ocultación 
+de información.
+Encapsulación y Ocultación de Información en POO (Java)
+¿Qué buscan?
+La encapsulación y la ocultación de información buscan proteger los datos internos de un 
+objeto y controlar cómo se accede o modifica ese estado.
+En Java se logra usando modificadores de acceso (private, public, protected) y métodos 
+getters/setters.
+🎯
+Ventajas de la ocultación de información
+1. Seguridad de datos
+Evita cambios incorrectos en los atributos desde fuera de la clase.
+2. Control del acceso
+Permite validar datos antes de modificarlos (ej: no permitir edad negativa).
+3. Mantenimiento más fácil
+Puedes cambiar la implementación interna sin afectar el código que usa la clase.
+4. Menor acoplamiento
+Las clases dependen menos unas de otras →
+ código más modular.
+5. Mejor organización y claridad
+Cada clase controla su propio comportamiento.
+📌
+Ejemplo simple en Java
+class Persona {
+private int edad;   // atributo oculto
+public int getEdad() {
+return edad;
+}
+public void setEdad(int edad) {
+if (edad >= 0) {
+this.edad = edad;
+}
+}
+}
+👉
+ Aquí no se puede modificar edad directamente, solo mediante métodos controlados.
+2. ¿Qué se entiende por la interfaz pública de un objeto o 
+clase en POO? Describe brevemente cómo se relaciona 
+con la ocultación de información.
+✅
+¿Qué es la interfaz pública de una clase u objeto en POO?
+La interfaz pública es el conjunto de métodos y atributos accesibles desde fuera de la 
+clase (normalmente los public) que permiten interactuar con el objeto.
+👉
+ Es lo que otras clases pueden ver y usar.
+En Java, está formada principalmente por:
+Métodos public
+(En general, no se recomienda atributos public)
+🔎
+Relación con la ocultación de información
+La interfaz pública expone solo lo necesario y mantiene ocultos los detalles internos 
+(private).
+Lo visible →
+ comportamiento (qué puede hacer el objeto).
+Lo oculto →
+ implementación interna (cómo lo hace).
+Esto permite:
+Proteger los datos internos.
+Cambiar la implementación sin afectar al código que usa la clase.
+Reducir errores y acoplamiento.
+📌
+Ejemplo en Java
+class CuentaBancaria {
+private double saldo;  // oculto
+public void depositar(double cantidad) {
+if (cantidad > 0) {
+}
+saldo += cantidad;
+}
+public double getSaldo() {
+return saldo;
+}
+}
+✔
+ La interfaz pública →
+ depositar() y getSaldo()
+✖
+ El atributo saldo está oculto.
+En resumen:
+La interfaz pública define cómo se usa el objeto, mientras que la ocultación de 
+información protege cómo está implementado internamente.
+3. Brevemente: ¿Por qué hay que ser conscientes y 
+diseñar con cuidado la interfaz pública de una clase? ¿Es 
+fácil cambiarla?
+✅
+¿Por qué hay que diseñar con cuidado la interfaz pública de una clase?
+La interfaz pública es el contrato entre la clase y el resto del programa.
+Todo el código que use esa clase depende de esos métodos (public), por eso 
+deben estar bien pensados: claros, necesarios y seguros.
+👉
+Si la interfaz está mal diseñada puede causar:
+Uso incorrecto de la clase
+Código difícil de mantener
+Errores en muchas partes del programa
+❌
+¿Es fácil cambiarla?
+No. Cambiar la interfaz pública es difícil porque puede romper todo el código 
+que ya la utiliza.
+En proyectos grandes eso significa modificar muchas clases y archivos.
+👉
+Por eso en Java y en POO se intenta diseñar bien la interfaz desde el 
+principio y mantenerla estable.
+4. ¿Qué son las invariantes de clase y por qué la 
+ocultación de información nos ayuda?
+✅
+ ¿Qué son las invariantes de clase?
+Las invariantes de clase son condiciones o reglas que siempre deben 
+cumplirse para que un objeto esté en un estado válido.
+ Se deben cumplir después de crear el objeto y después de ejecutar cualquier 
+método público.
+👉
+ Ejemplos:
+edad >= 0
+saldo >= 0
+fechaInicio ≤ fechaFin
+🔎
+ ¿Por qué ayuda la ocultación de información?
+Porque al hacer los atributos private, solo la propia clase puede modificarlos 
+mediante métodos controlados.
+ Así podemos validar los datos y asegurar que las invariantes siempre se 
+cumplan.
+👉
+ Si los atributos fueran public, cualquier clase podría cambiar valores y 
+romper las invariantes.
+📌
+ Ejemplo en Java
+class CuentaBancaria {
+    private double saldo;   // Invariante: saldo >= 0
+    public void retirar(double cantidad) {
+        if (cantidad <= saldo) {
+            saldo -= cantidad;
+        }
+    }
+}
+✔
+ La clase controla el saldo →
+ la invariante se mantiene.
+ 
+✖
+ Sin ocultación, alguien podría poner saldo = -100.
+5. Pon un ejemplo de una clase Punto en Java, con dos 
+coordenadas, x e y, de tipo double, con un método 
+calcularDistanciaAOrigen, y que haga uso de la 
+ocultación de información. ¿Cuál es la interfaz pública de 
+la clase Punto? ¿Qué significa public y private?
+✅
+Ejemplo de clase Punto en Java con encapsulación
+class Punto {
+private double x;
+private double y;
+public Punto(double x, double y) {
+this.x = x;
+this.y = y;
+}
+public double calcularDistanciaAOrigen() {
+return Math.sqrt(x * x + y * y);
+}
+public double getX() { return x; }
+public double getY() { return y; }
+}
+🔎
+¿Cuál es la interfaz pública de la clase Punto?
+La interfaz pública son los elementos accesibles desde fuera:
+Punto(double x, double y) →
+ constructor
+calcularDistanciaAOrigen()
+getX()
+getY()
+�
+�
+ Son los métodos public que otras clases pueden usar.
+📌
+¿Qué significan public y private?
+public →
+ accesible desde cualquier clase.
+private →
+ solo accesible dentro de la propia clase.
+👉
+ Aquí x e y están ocultos (private) para proteger los datos y controlar su uso mediante 
+métodos públicos.
+6. En Java, ¿A quiénes se pueden aplicar los 
+modificadores public o private?
+En Java, los modificadores public y private se pueden aplicar a:
+✅
+1. Atributos (variables de instancia o de clase)
+Para controlar quién puede acceder a los datos.
+private int edad;
+public String nombre;
+✅
+2. Métodos
+Para decidir desde dónde se pueden llamar.
+public void mostrar() { }
+private void calcular() { }
+✅
+3. Clases internas (inner classes)
+Las clases dentro de otra clase pueden ser public o private.
+private class Nodo { }
+⚠
+Importante
+Las clases principales (top-level) solo pueden ser public o sin modificador 
+(no pueden ser private).
+👉
+En resumen:
+public y private se usan en atributos, métodos y clases internas para 
+controlar el acceso y aplicar la encapsulación.
+7. En POO, la visibilidad puede ser pública o privada, 
+pero ¿existen más tipos de visibilidad? ¿Qué ocurre en 
+Java? ¿Y en otros lenguajes?
+Sí, además de pública y privada, en POO existen más niveles de visibilidad.
+✅
+En Java
+Java tiene 4 niveles de visibilidad:
+1. public →
+ accesible desde cualquier clase.
+2. private →
+ solo dentro de la misma clase.
+3. protected →
+ accesible en la misma clase, subclases y mismo paquete.
+4. (sin modificador) package-private →
+ accesible solo dentro del mismo 
+paquete.
+👉
+Ejemplo:
+public class A {
+private int x;
+protected int y;
+int z;        
+// package-private
+public int w;
+}
+✅
+En otros lenguajes
+Depende del lenguaje:
+C++ →
+ public, private, protected
+C# →
+ public, private, protected, internal, protected internal
+Python →
+ no hay modificadores estrictos, pero se usan convenciones (_x, 
+__x)
+👉
+Conclusión:
+Sí, hay más tipos de visibilidad. Java tiene 4 niveles para controlar mejor el 
+acceso y aplicar encapsulación.
+8. Responde: Los miembros de instancia privados de un 
+objeto están ocultos para (a) otras clases o (b) otras 
+instancias, aunque sean de la misma clase. Pon un 
+ejemplo añadiendo un método 
+calcularDistanciaAPunto(Punto otro) y explica la 
+respuesta.
+La respuesta correcta es: (a) otras clases, pero no (b) otras instancias de la 
+misma clase.
+En Java, los atributos private están ocultos para otras clases, pero una 
+instancia puede acceder a los privados de otra instancia de la misma clase 
+dentro de un método de la clase.
+✅
+ Ejemplo con Punto
+class Punto {
+    private double x;
+    private double y;
+    public Punto(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
+    public double calcularDistanciaAOrigen() {
+        return Math.sqrt(x * x + y * y);
+    }
+    // Método que calcula la distancia a otro punto
+    public double calcularDistanciaAPunto(Punto otro) {
+        double dx = this.x - otro.x;  // puedo acceder a 'x' de otra instancia
+        double dy = this.y - otro.y;  // puedo acceder a 'y' de otra instancia
+        return Math.sqrt(dx * dx + dy * dy);
+}
+}
+🔎
+Explicación
+x e y son privados, por lo que ninguna otra clase puede acceder a ellos 
+directamente.
+Sin embargo, dentro de la propia clase Punto, podemos acceder a x e y de 
+cualquier instancia de Punto, por ejemplo otro.x.
+Esto permite implementar métodos como calcularDistanciaAPunto sin 
+violar la encapsulación.
+9. ¿Qué son los métodos "getter" y "setter" en los 
+lenguajes orientados a objetos?
+✅
+Métodos "getter" y "setter" en POO
+En los lenguajes orientados a objetos, los getters y setters son métodos que 
+permiten acceder y modificar atributos privados de una clase de forma 
+controlada.
+🔹
+Getter
+Sirve para obtener el valor de un atributo privado.
+Siempre devuelve el valor del atributo.
+public double getX() {
+return x;
+}
+🔹
+Setter
+Sirve para modificar el valor de un atributo privado.
+Permite validar o controlar el valor antes de asignarlo.
+public void setX(double x) {
+if (x >= 0) { // ejemplo de validación
+this.x = x;
+}
+}
+�
+�
+Por qué se usan
+Mantener la ocultación de información (private).
+Evitar que el estado del objeto quede inconsistente.
+Permitir cambiar la implementación interna sin afectar a otras clases.
+10. Cuando nos referimos a que la ocultación de 
+información mejora la "seguridad" del programa, ¿nos 
+referimos a que no pueda ser "hackeado"?
+No exactamente.
+Cuando hablamos de que la ocultación de información mejora la “seguridad” 
+del programa” en POO y Java, no nos referimos a que el programa sea 
+inmune a hackers o ataques externos, sino a que los datos internos de los 
+objetos no pueden ser modificados accidentalmente o de forma incorrecta 
+desde otras partes del código.
+👉
+Es una seguridad a nivel de programación, también llamada integridad de 
+datos:
+Los atributos private solo se pueden cambiar mediante métodos 
+controlados (setters), donde podemos validar los valores.
+Esto evita errores, inconsistencias y comportamientos inesperados 
+dentro del programa.
+En resumen: protege el estado de los objetos frente a errores de 
+programación, no frente a ataques externos.
+11. ¿Qué diferencia hay entre miembro de instancia y 
+miembro de clase? ¿Los miembros de clase también se 
+pueden ocultar?
+✅
+Diferencia entre miembro de instancia y miembro de clase en Java:
+Concepto Miembro de instancia Miembro de clase
+Definición Pertenece a cada 
+objeto. Cada instancia 
+tiene su propia copia.
+Pertenece a la clase, 
+no a objetos 
+individuales. Se 
+declara con static.
+Ejemplo private double x; en 
+Punto →
+ cada punto 
+tiene su propio x.
+private static int 
+contador; →
+ hay un 
+único contador 
+compartido por todos 
+los objetos.
+Acceso Se accede a través de 
+un objeto: 
+punto.getX()
+Se accede a través de 
+la clase: 
+Punto.contador
+🔎
+ ¿Se pueden ocultar los miembros de clase?
+Sí. Los miembros de clase también se pueden declarar private o public, igual 
+que los de instancia.
+private static int contador; →
+ oculto para otras clases, pero accesible 
+dentro de la propia clase.
+Esto permite controlar el acceso y proteger la información compartida, 
+igual que con los atributos normales.
+12. Brevemente: ¿Tiene sentido que los constructores 
+sean privados?
+Sí, tiene sentido que un constructor sea private en casos especiales.
+Se usa para controlar la creación de objetos.
+Por ejemplo, en patrones de diseño como Singleton, donde solo quieres 
+una única instancia de la clase.
+También permite crear métodos estáticos que devuelvan objetos ya 
+configurados (fábricas de objetos).
+👉
+ En general, los constructores suelen ser public, pero hacerlos private es 
+útil para controlar y limitar la creación de instancias.
+13. ¿Cómo se indican los miembros de clase en Java? Pon 
+un ejemplo, en la clase Punto definida anteriormente, 
+para que incluya miembros de clase que permitan saber 
+cuáles son los valores x e y máximos que se han 
+establecido en todos los puntos que se hayan creado 
+hasta el momento.
+✅
+ Miembros de clase en Java
+Se indican usando la palabra clave static.
+Son compartidos por todos los objetos de la clase, no por cada instancia.
+Se pueden usar para contar objetos, valores máximos, o cualquier 
+información global de la clase.
+Ejemplo con la clase Punto
+class Punto {
+    private double x;
+    private double y;
+    // Miembros de clase (estáticos) para rastrear los máximos
+    private static double maxX = Double.NEGATIVE_INFINITY;
+    private static double maxY = Double.NEGATIVE_INFINITY;
+    public Punto(double x, double y) {
+        this.x = x;
+        this.y = y;
+        // Actualizar los máximos al crear un nuevo punto
+        if (x > maxX) {
+            maxX = x;
+        }
+        if (y > maxY) {
+            maxY = y;
+        }
+    }
+    public double calcularDistanciaAOrigen() {
+        return Math.sqrt(x * x + y * y);
+    }
+    public double getX() { return x; }
+    public double getY() { return y; }
+    // Métodos públicos para acceder a los máximos de todos los puntos
+    public static double getMaxX() { return maxX; }
+    public static double getMaxY() { return maxY; }
+}
+🔎
+ Explicación
+maxX y maxY son miembros de clase (static) →
+ compartidos por todos los 
+objetos Punto.
+Cada vez que se crea un nuevo punto, se actualizan los máximos si 
+corresponde.
+Los métodos getMaxX() y getMaxY() forman parte de la interfaz pública 
+de clase para consultar los máximos.
+14. Como sería un método factoría dentro de la clase 
+Punto para construir un Punto a partir de dos 
+coordenadas, pero que las redondee al entero más 
+cercano. Escribe sólo el código del método, no toda la 
+clase ¿Has usado static?
+Sí, un método factoría se hace static porque no necesita una instancia 
+existente para crear un objeto nuevo.
+✅
+Código del método factoría
+public static Punto crearRedondeado(double x, double y) {
+int xRedondeado = (int) Math.round(x);
+int yRedondeado = (int) Math.round(y);
+return new Punto(xRedondeado, yRedondeado);
+}
+static permite llamar al método como: Punto p = 
+Punto.crearRedondeado(3.7, 4.2);
+Devuelve un nuevo objeto Punto con las coordenadas redondeadas.
+15. Cambia la implementación de Punto. En vez de dos 
+double, emplea un array interno de dos posiciones, 
+intentando no modificar la interfaz pública de la clase.
+Perfecto. Podemos cambiar la implementación interna usando un array de 
+dos posiciones para almacenar x e y, sin modificar la interfaz pública 
+(constructores, getters y métodos siguen igual).
+✅
+Nueva implementación de Punto
+class Punto {
+private double[] coordenadas = new double[2]; // [0] = x, [1] = y
+// Miembros de clase para máximos
+private static double maxX = Double.NEGATIVE_INFINITY;
+private static double maxY = Double.NEGATIVE_INFINITY;
+    public Punto(double x, double y) {
+        coordenadas[0] = x;
+        coordenadas[1] = y;
+        // Actualizar máximos
+        if (x > maxX) maxX = x;
+        if (y > maxY) maxY = y;
+    }
+    public double calcularDistanciaAOrigen() {
+        return Math.sqrt(coordenadas[0] * coordenadas[0] + coordenadas[1] * 
+coordenadas[1]);
+    }
+    public double getX() { return coordenadas[0]; }
+    public double getY() { return coordenadas[1]; }
+    // Métodos de clase
+    public static double getMaxX() { return maxX; }
+    public static double getMaxY() { return maxY; }
+    // Método factoría estático
+    public static Punto crearRedondeado(double x, double y) {
+        int xRedondeado = (int) Math.round(x);
+        int yRedondeado = (int) Math.round(y);
+        return new Punto(xRedondeado, yRedondeado);
+    }
+// Método para calcular distancia a otro punto
+public double calcularDistanciaAPunto(Punto otro) {
+double dx = this.coordenadas[0] - otro.coordenadas[0];
+double dy = this.coordenadas[1] - otro.coordenadas[1];
+return Math.sqrt(dx * dx + dy * dy);
+}
+}
+🔎
+Explicación
+Internamente usamos coordenadas[0] y coordenadas[1] en vez de x y y.
+La interfaz pública no cambia:
+getX(), getY()
+calcularDistanciaAOrigen()
+calcularDistanciaAPunto(Punto otro)
+método factoría crearRedondeado()
+métodos estáticos de máximos getMaxX(), getMaxY()
+Esto permite cambiar la implementación interna sin romper el código que ya 
+usa la clase.
+16. Si un atributo va a tener un método "getter" y 
+"setter" públicos, ¿no es mejor declararlo público? ¿Cuál 
+es la convención más habitual sobre los atributos, que 
+sean públicos o privados? ¿Tiene esto algo que ver con 
+las "invariantes de clase"?
+No, no es mejor declararlo público aunque tenga getter y setter.
+✅
+Explicación
+1. Convención habitual
+Los atributos casi siempre se declaran private.
+Se accede a ellos mediante getters y setters públicos si es necesario.
+Esto mantiene la ocultación de información y protege los datos 
+internos.
+2. Por qué no ponerlos públicos
+Si el atributo fuera public, cualquier clase podría modificarlo 
+directamente, sin validación.
+Con private + setter, podemos controlar el valor y mantenerlo 
+consistente.
+3. Relación con invariantes de clase
+Las invariantes de clase son reglas que siempre deben cumplirse (por 
+ejemplo, edad >= 0).
+Los setters permiten validar antes de cambiar el valor y así proteger 
+las invariantes.
+Si el atributo fuera público, cualquiera podría romper la invariante sin 
+control.
+En resumen:
+Se declaran atributos private, aunque tengan getter y setter públicos, para 
+proteger los datos y mantener las invariantes de clase.
+17. ¿Qué significa que una clase sea inmutable? ¿qué es 
+un método modificador? ¿Un método modificador es 
+siempre un "setter"? ¿Tiene ventajas que una clase sea 
+inmutable?
+✅
+Clase inmutable
+Una clase es inmutable cuando, una vez creada una instancia, sus atributos 
+no pueden cambiar.
+Todos los atributos suelen ser private y no hay setters.
+Cualquier “cambio” se hace creando un nuevo objeto.
+Ejemplo simple:
+class PuntoInmutable {
+private final double x;
+private final double y;
+public PuntoInmutable(double x, double y) {
+this.x = x;
+this.y = y;
+}
+public double getX() { return x; }
+public double getY() { return y; }
+}
+✅
+Método modificador
+Es un método que cambia el estado interno de un objeto.
+No siempre es un setter: puede ser cualquier método que modifique atributos 
+privados.
+Ejemplo:
+public void mover(double dx, double dy) {
+this.x += dx;
+this.y += dy;
+}
+Aquí mover() modifica el estado, pero no es un setter tradicional.
+✅
+Ventajas de que una clase sea inmutable
+1. Seguridad de datos →
+ no se puede cambiar accidentalmente.
+2. Más fácil de razonar y depurar →
+ el objeto siempre mantiene su estado.
+3. Hilos seguros (thread-safe) →
+ no hace falta sincronización para leer 
+objetos.
+4. Útil en colecciones y claves de mapas →
+ el objeto no cambia mientras se 
+usa como clave.
+En resumen:
+Inmutable →
+ atributos nunca cambian después de la creación.
+Método modificador →
+ cualquier método que cambie atributos, no solo 
+setters.
+Ventajas →
+ seguridad, facilidad de mantenimiento y hilos seguros.
+18. ¿Es recomendable incluir métodos "setter" siempre y 
+como convención?
+No, no es recomendable incluir métodos setter siempre.
+✅
+Explicación
+1. Convención
+La convención es hacer privados los atributos y solo incluir getters y 
+setters cuando realmente se necesite modificar el valor desde fuera.
+No todos los atributos necesitan ser modificables; algunos pueden ser 
+solo de lectura (getter sin setter).
+2. Razón principal
+Los setters permiten cambiar el estado del objeto. Si los ponemos 
+siempre, podemos romper invariantes de clase o introducir errores.
+Para clases inmutables, no se usan setters, lo que da más seguridad y 
+estabilidad.
+3. Regla práctica
+Solo añadir setters cuando tenga sentido permitir cambios 
+controlados.
+Para atributos que no deberían cambiar, no poner setter.
+En resumen:
+No todos los atributos necesitan setters. Se usan solo cuando es necesario 
+modificar valores de forma controlada y proteger las invariantes de clase.
+19. ¿La clase String en Java es mutable o inmutable? 
+¿Qué ocurre al concatenar dos cadenas? ¿Qué debemos 
+hacer si vamos a hacer una operación que implique 
+concatenar muchas veces para construir paso a paso 
+una cadena muy larga?
+✅
+Clase String en Java: inmutable
+Las instancias de String no se pueden modificar después de ser creadas.
+Cualquier operación que parezca “modificar” un String en realidad crea 
+un nuevo objeto.
+🔹
+Concatenación de cadenas
+String s1 = "Hola";
+String s2 = " Mundo";
+String s3 = s1 + s2;  // Se crea un nuevo String
+s1 y s2 no cambian.
+s3 es un nuevo objeto String con el resultado.
+🔹
+Concatenar muchas veces
+Si concatenas muchas veces en un bucle con +, se crean muchos objetos 
+temporales, lo que es ineficiente.
+✅
+Solución: usar StringBuilder o StringBuffer:
+StringBuilder sb = new StringBuilder();
+for (int i = 0; i < 1000; i++) {
+sb.append("a");
+}
+String resultado = sb.toString();
+StringBuilder es mutable, permite modificar la cadena sin crear nuevos 
+objetos.
+Es mucho más eficiente para construir cadenas largas paso a paso.
+En resumen:
+String →
+ inmutable
+Concatenar con + →
+ crea nuevos objetos
+Muchas concatenaciones →
+ usar StringBuilder para eficiencia.
+20. En POO ¿Cómo se comparan objetos de una misma 
+clase? ¿Por su contenido o por su identidad? ¿Qué es el 
+método equals en Java? ¿Qué hace por defecto? ¿Cómo 
+se deben comparar dos cadenas en Java?
+✅
+Comparación de objetos en POO y Java
+1. Por defecto, los objetos se comparan por identidad
+Es decir, si apuntan al mismo lugar en memoria, no por su contenido.
+Ejemplo:
+Punto p1 = new Punto(3, 4);
+Punto p2 = new Punto(3, 4);
+System.out.println(p1 == p2); // false, son objetos distintos
+1. Método equals() en Java
+Es un método de la clase Object que se puede sobrescribir.
+Por defecto (Object.equals()): compara identidad, igual que ==.
+Si queremos comparar contenido, debemos sobrescribir equals() en 
+nuestra clase.
+Ejemplo sobrescribiendo equals en Punto:
+@Override
+public boolean equals(Object obj) {
+if (!(obj instanceof Punto)) return false;
+Punto otro = (Punto) obj;
+return this.getX() == otro.getX() && this.getY() == otro.getY();
+}
+1. Comparar cadenas (String) en Java
+No se debe usar == (compara referencias).
+Se debe usar equals() para comparar el contenido:
+String s1 = "Hola";
+String s2 = new String("Hola");
+System.out.println(s1 == s2);        
+// false (distintas referencias)
+System.out.println(s1.equals(s2));   // true  (mismo contenido)
+🔹
+Resumen
+Por defecto, los objetos →
+ comparación por identidad.
+equals() →
+ se puede sobrescribir para comparar contenido.
+String →
+ usar equals(), no ==, para comparar el contenido real.
+21. ¿Qué son las clases "wrapper" en un lenguaje de 
+programación orientado a objetos? ¿Cómo se hace? ¿Es 
+un proceso automático? ¿Qué ventajas tienen? ¿Todos 
+los lenguajes orientados a objetos tienen tipos 
+primitivos y necesitan wrappers?
+✅
+Clases "wrapper" en POO
+Las clases wrapper son clases que “envuelven” tipos primitivos (como int, 
+double, boolean) para tratarlos como objetos en un lenguaje orientado a 
+objetos.
+🔹
+Cómo se hace en Java
+Java tiene clases wrapper para cada tipo primitivo:
+Primitivo
+int
+double
+Wrapper
+Integer
+Double
+boolean
+char
+Ejemplo:
+int num = 5;
+Boolean
+Character
+Integer obj = Integer.valueOf(num);  // Convertir int a objeto Integer
+int n2 = obj.intValue();             
+// Convertir de vuelta a int
+Desde Java 5, autoboxing hace esto automáticamente:
+Integer obj2 = 10;  // int se convierte automáticamente a Integer
+int n3 = obj2;      // Integer se convierte automáticamente a int
+🔹
+Ventajas de las clases wrapper
+1. Permiten usar tipos primitivos donde se necesitan objetos, por ejemplo en 
+colecciones:
+ArrayList<Integer> lista = new ArrayList<>();
+lista.add(5);  // autoboxing de int a Integer
+1. Ofrecen métodos útiles: parsear, convertir a cadena, comparar, etc.
+2. Facilitan la compatibilidad con APIs que trabajan solo con objetos.
+Todos los lenguajes orientados a objetos necesitan wrappers?
+🔹
+No necesariamente:
+Lenguajes como Java, C# tienen tipos primitivos y necesitan wrappers.
+Otros lenguajes como Python, Ruby, JavaScript tratan todos los valores 
+como objetos, por lo que no necesitan wrappers explícitos.
+En resumen:
+Wrappers →
+ convierten tipos primitivos en objetos, permiten usar métodos y 
+colecciones, y en Java hay autoboxing que lo hace automático.
+22. ¿En POO qué es un tipo de dato enumerado? ¿En Java, 
+un tipo de dato enumerado es una clase? ¿Qué ventajas 
+tienen en términos de encapsulación los enumerados en 
+Java?
+✅
+Tipo de dato enumerado en POO
+Un tipo de dato enumerado (enum) es un tipo que define un conjunto 
+limitado y fijo de valores posibles.
+🔹
+Se usa cuando solo se permiten valores específicos, por ejemplo: días de 
+la semana, colores, estados.
+En Java: un enum es una clase
+Cada enumerado en Java es una clase especial que hereda de 
+java.lang.Enum.
+Cada valor del enum es en realidad un objeto de esa clase.
+Ejemplo:
+enum Dia {
+LUNES, MARTES, MIERCOLES, JUEVES, VIERNES, SABADO, DOMINGO
+}
+Dia.LUNES es un objeto de la clase Dia.
+🔹
+Ventajas de los enumerados en términos de encapsulación
+1. Control de valores permitidos →
+ no se pueden crear valores fuera del 
+enum.
+2. Protección de datos →
+ los valores son constantes y seguros.
+3. Métodos propios →
+ un enum puede tener atributos y métodos, 
+encapsulando comportamiento relacionado con los valores.
+Ejemplo con métodos en enum:
+enum Color {
+    ROJO(255,0,0), VERDE(0,255,0), AZUL(0,0,255);
+    private int r, g, b;  // encapsulado
+    private Color(int r, int g, int b) {
+        this.r = r;
+        this.g = g;
+        this.b = b;
+    }
+    public String rgb() {
+        return r + "," + g + "," + b;
+    }
+}
+Los atributos r, g, b están ocultos (private) →
+ encapsulación.
+Se accede solo a través de métodos como rgb().
+En resumen:
+Enum →
+ tipo de datos con valores limitados.
+En Java →
+ es una clase especial.
+Ventajas →
+ control de valores, seguridad, encapsulación y métodos 
+asociados.
+23. Crea un tipo enumerado en Java que se llame Mes, 
+con doce posibles instancias y que además proporcione 
+métodos para obtener cuántos días tiene ese mes, el 
+ordinal de ese mes en el año (1-12), empleando atributos 
+privados y constructores del tipo enumerado.
+✅
+ Ejemplo de enum Mes en Java con atributos y métodos
+public enum Mes {
+    ENERO(31), FEBRERO(28), MARZO(31), ABRIL(30),
+    MAYO(31), JUNIO(30), JULIO(31), AGOSTO(31),
+    SEPTIEMBRE(30), OCTUBRE(31), NOVIEMBRE(30), DICIEMBRE(31);
+    // Atributo privado para almacenar los días del mes
+    private final int dias;
+    // Constructor privado del enum
+    private Mes(int dias) {
+        this.dias = dias;
+    }
+    // Método para obtener los días del mes
+    public int getDias() {
+        return dias;
+    }
+    // Método para obtener el ordinal del mes en el año (1-12)
+    public int getOrdinal() {
+        return this.ordinal() + 1;  // ordinal() devuelve 0-11
+    }
+}
+🔎
+Explicación
+Cada instancia del enum (ENERO, FEBRERO, etc.) tiene un atributo 
+privado dias.
+El constructor se llama automáticamente para cada instancia al definir el 
+enum.
+getDias() permite acceder al número de días de forma controlada.
+getOrdinal() devuelve el número del mes en el año, sumando 1 al 
+ordinal() que empieza en 0.
+24. Añade a la clase Mes del ejercicio anterior cuatro 
+métodos para devolver si ese mes tiene algunos días de 
+invierno, primavera, verano u otoño, indicando con un 
+booleano el hemisferio (norte o sur, parámetro 
+enHemisferioNorte). Es decir: esDePrimavera(boolean 
+esHemisferioNorte), esDeVerano(boolean 
+esHemisferioNorte), esDeOtoño(boolean 
+esHemisferioNorte), esDeInvierno(boolean 
+esHemisferioNorte)
+Perfecto. Podemos añadir los cuatro métodos al enum Mes, usando el 
+parámetro boolean esHemisferioNorte para determinar las estaciones según 
+el hemisferio.
+✅
+Código actualizado de Mes
+public enum Mes {
+ENERO(31), FEBRERO(28), MARZO(31), ABRIL(30),
+MAYO(31), JUNIO(30), JULIO(31), AGOSTO(31),
+SEPTIEMBRE(30), OCTUBRE(31), NOVIEMBRE(30), DICIEMBRE(31);
+private final int dias;
+private Mes(int dias) {
+        this.dias = dias;
+    }
+    public int getDias() {
+        return dias;
+    }
+    public int getOrdinal() {
+        return this.ordinal() + 1;
+    }
+    // Estaciones según hemisferio
+    public boolean esDePrimavera(boolean esHemisferioNorte) {
+        if (esHemisferioNorte) {
+            return this == MARZO || this == ABRIL || this == MAYO;
+        } else {
+            return this == SEPTIEMBRE || this == OCTUBRE || this == NOVIEMBRE;
+        }
+    }
+    public boolean esDeVerano(boolean esHemisferioNorte) {
+        if (esHemisferioNorte) {
+            return this == JUNIO || this == JULIO || this == AGOSTO;
+        } else {
+            return this == DICIEMBRE || this == ENERO || this == FEBRERO;
+        }
+    }
+    public boolean esDeOtoño(boolean esHemisferioNorte) {
+        if (esHemisferioNorte) {
+            return this == SEPTIEMBRE || this == OCTUBRE || this == NOVIEMBRE;
+        } else {
+            return this == MARZO || this == ABRIL || this == MAYO;
+        }
+    }
+    public boolean esDeInvierno(boolean esHemisferioNorte) {
+        if (esHemisferioNorte) {
+            return this == DICIEMBRE || this == ENERO || this == FEBRERO;
+        } else {
+            return this == JUNIO || this == JULIO || this == AGOSTO;
+        }
+    }
+}
+🔎
+ Explicación
+Cada método devuelve true si el mes pertenece a la estación 
+correspondiente en el hemisferio indicado.
+esHemisferioNorte = true →
+ estaciones según el hemisferio norte.
+esHemisferioNorte = false →
+ estaciones invertidas para el hemisferio sur.
+La interfaz pública sigue igual: no cambia la forma de acceder a días ni 
+ordinal.
