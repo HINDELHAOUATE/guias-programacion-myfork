@@ -1,1 +1,616 @@
-En esta carpeta debes copiar los ficheros de enunciados y editarlos aquí. De esta forma, siempre tendrás los originales intactos.
+Tema 3: Excepciones
+1. Empecemos un tema sobre control de errores en lenguajes de programación, con algo básico. En C, donde no existen las excepciones, pongamos un ejemplo de una raíz que toma número flotante positivo. Queremos controlar el error si la función recibe un número negativo. El usuario debe ser informado pero desde fuera de la función `raiz` ¿Cómo indicamos ese error?. Enumera dos opciones diferentes de diseñar, poniendo un ejemplo de código de cada una.
+En C no existen excepciones, así que el control de errores se hace manualmente.
+ Si la función raiz(float x) recibe un número negativo, debemos avisar del error desde fuera de la función.
+OPCIÓN 1: Devolver un valor especial
+La función devuelve un valor que indique error.
+Ejemplo: devolver -1 
+Idea
+Si x < 0 → devolver valor especial.
+El que llama a la función comprueba ese valor.
+Código ejemplo
+#include <stdio.h>
+#include <math.h>
+
+float raiz(float x) {
+    if (x < 0) {
+        return -1;   // valor que indica error
+    }
+    return sqrt(x);
+}
+int main() {
+    float resultado = raiz(-4);
+
+    if (resultado == -1) {
+        printf("Error: no se puede calcular la raiz de un numero negativo\n");
+    } else {
+        printf("Resultado: %f\n", resultado);
+    }
+    return 0;
+}
+⚠ Problema
+Si algún día la función pudiera devolver -1 como resultado válido, habría confusión.
+OPCIÓN 2: Usar un parámetro adicional (flag de error)
+La función recibe un puntero a una variable donde indicará si hubo error.
+Idea
+La función devuelve el resultado.
+Además modifica una variable error.
+Código ejemplo
+#include <stdio.h>
+#include <math.h>
+
+float raiz(float x, int *error) {
+    if (x < 0) {
+        *error = 1;     // indicamos que hay error
+        return 0;       // valor cualquiera
+    }
+    *error = 0;         // no hay error
+    return sqrt(x);
+}
+int main() {
+    int error;
+    float resultado = raiz(-4, &error);
+
+    if (error) {
+        printf("Error: numero negativo\n");
+    } else {
+        printf("Resultado: %f\n", resultado);
+    }
+    return 0;
+}
+✔ Ventaja
+No depende de un valor especial.
+ Separa claramente resultado y estado de error.
+Conclusión
+En C, sin excepciones:
+🔹 Devolver un valor especial
+🔹 Usar un parámetro adicional para indicar error
+En ambos casos, el control del error lo hace quien llama a la función, no la función internamente.
+2. Brevemente ¿Qué es una **"excepción"**? ¿Con qué objetivo las usa un programador cuando implementa funciones o cuando las llama?
+¿Qué es una excepción?
+Una excepción es un error que ocurre durante la ejecución del programa y que en Java se representa como un objeto especial.
+Ejemplos: división entre 0, archivo inexistente, índice fuera del array.
+En C → se usan valores de error.
+ En Java → se lanza una excepción.
+¿Para qué se usan?
+Al implementar funciones
+Para avisar de un error que la función no puede resolver.
+Ejemplo: función que recibe número negativo para raíz.
+Al llamar funciones
+Para capturar y manejar errores con try-catch, evitando que el programa se detenga.
+Permite mostrar mensajes, pedir otro dato, continuar ejecución.
+Resumen
+Una excepción = objeto que representa un error en ejecución.
+Se usa para:
+🔹 Indicar errores desde una función.
+🔹 Controlar errores donde se llama a la función.
+Ventaja: código más claro y seguro que en C.
+3. Reescribe el mismo ejemplo de raiz, pero en Java, metiendo ese método en una clase `Calculadora` y llama a dicho método desde el método `main`, mostrando cómo se puede controlar desde fuera.
+ Ejemplo de raíz en Java con control de error
+Queremos que el método raiz avise del error y que se controle desde main.
+En Java usamos excepciones.
+Clase Calculadora
+class Calculadora {
+    public static double raiz(double x) throws Exception {
+        if (x < 0) {
+            throw new Exception("Numero negativo");
+        }
+        return Math.sqrt(x);
+    }
+}
+🔹 throw → lanza la excepción
+ 🔹 throws → indica que el método puede lanzar error
+Llamada desde main controlando el error
+public class Main {
+    public static void main(String[] args) {
+
+        try {
+            double r = Calculadora.raiz(-4);
+            System.out.println("Resultado: " + r);
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+}
+Explicación 
+raiz() detecta el error y lanza excepción.
+main() usa try-catch para controlarlo desde fuera.
+El programa no se rompe y muestra mensaje.
+Igual idea que en C, pero más limpio.
+Resumen
+throw → lanzar error.
+throws → avisar que puede haber error.
+try-catch → controlar error desde fuera.
+4. ¿Qué es **"lanzar"** una excepción? ¿Qué es **"controlar"** o **"capturar"** una excepción? ¿Qué es que se **"propague"** una excepción? ¿Qué le va ocurriendo a las funciones en la pila de llamadas por donde se va propagando la excepción? ¿Las funciones que no la controlan se reanudan después de alguna forma? Explica con el mismo ejemplo anterior en Java de la raíz cuadrada.
+Conceptos sobre Excepciones
+Usamos el ejemplo de Calculadora.raiz(x).
+1. ¿Qué es "lanzar" una excepción?
+Es crear y enviar un error cuando ocurre un problema.
+En Java se usa throw.
+if (x < 0) {
+    throw new Exception("Numero negativo");
+}
+🔹 La función dice: “no puedo seguir, hay un error”.
+2. ¿Qué es "capturar" o "controlar" una excepción?
+Es recibir el error y decidir qué hacer.
+Se usa try-catch.
+try {
+    double r = Calculadora.raiz(-4);
+} catch (Exception e) {
+    System.out.println("Error: " + e.getMessage());
+}
+🔹 El programa no se rompe, muestra mensaje.
+3. ¿Qué es que una excepción se "propague"?
+Si una función no captura el error, la excepción pasa a la función que la llamó.
+Va subiendo por la pila de llamadas.
+Ejemplo:
+main → metodoA → raiz
+Si raiz lanza error y metodoA no lo captura → llega a main.
+4. ¿Qué pasa con las funciones en la pila?
+Cuando la excepción sube:
+ Las funciones se terminan inmediatamente
+ Se eliminan de la pila
+ No siguen ejecutando código.
+Ejemplo:
+void metodoA() {
+    Calculadora.raiz(-4);
+    System.out.println("Nunca se ejecuta");
+}
+La línea final no se ejecuta.
+5. ¿Las funciones que no controlan la excepción se reanudan?
+❌ No.
+ Se cancelan y no continúan.
+Solo continúa el programa donde se captura la excepción.
+Resumen
+Lanzar → throw → enviar error.
+Capturar → try-catch → manejar error.
+Propagar → el error sube por la pila.
+Las funciones intermedias se cancelan.
+No se reanudan después.
+5. ¿Qué ventajas tiene frente a C, la **"propagación natural"** de las excepciones a través de la pila (*stack*) de llamadas?
+En Java, si una función no controla el error, la excepción sube automáticamente por la pila de llamadas hasta que alguien la capture.
+Ventajas frente a C
+Menos código repetido
+En C hay que comprobar errores en cada función.
+En Java, solo se controla donde tenga sentido.
+C
+if (raiz(x) == -1) return -1;
+Java
+ Solo un try-catch en el nivel adecuado.
+Código más limpio y legible
+La lógica del programa no se mezcla con comprobaciones constantes de error. Más fácil de entender y mantener.
+Errores no se ignoran fácilmente
+Si nadie captura la excepción, Java muestra el error y el programa se detiene.
+En C puedes olvidar comprobar el error.
+Separación de responsabilidades
+Función → detecta el error.
+Programa principal → decide qué hacer.
+Diseño más claro.
+Información detallada del error
+Las excepciones guardan mensaje y pila de llamadas.
+Más fácil depurar que en C.
+Resumen
+La propagación natural permite:
+🔹 Menos comprobaciones manuales.
+🔹 Código más limpio.
+🔹 Errores difíciles de ignorar.
+🔹 Mejor diseño del programa.
+🔹 Mejor información para depurar.
+Por eso Java maneja errores de forma más segura que C.
+6. En orientación a objetos, ¿las excepciones suelen ser objetos? ¿Qué ventajas tiene esto en términos de encapsulación? ¿Podemos entonces crear excepciones personalizadas?
+¿Las excepciones son objetos?
+Sí.
+ En Java, una excepción es un objeto de una clase que hereda de Exception.
+Ejemplo: ArithmeticException, IOException.
+Ventajas en términos de encapsulación
+Al ser objetos, las excepciones pueden:
+🔹 Guardar datos del error (mensaje, valores, código…)
+🔹 Tener métodos propios
+🔹 Ocultar detalles internos del error
+Igual que cualquier objeto en POO.
+Ejemplo:
+ Una excepción puede guardar el número negativo que causó el error.
+¿Podemos crear excepciones personalizadas?
+Sí
+ Podemos crear nuestra propia clase que herede de Exception.
+Útil cuando queremos errores específicos del programa.
+Ejemplo simple:
+class NumeroNegativoException extends Exception {
+    public NumeroNegativoException(String mensaje) {
+        super(mensaje);
+    }
+}
+Uso en Calculadora:
+if (x < 0) {
+    throw new NumeroNegativoException("No se admite numero negativo");
+}
+Resumen
+En Java las excepciones son objetos.
+Ventajas:
+🔹 Encapsulan información del error.
+🔹 Código más organizado.
+🔹 Mejor reutilización.
+Sí, podemos crear excepciones personalizadas heredando de Exception.
+7. En relación con las ventajas de la encapsulación, comparando el ejemplo en C con Java. ¿Qué **información esencial** lleva cualquier **objeto excepción** que es muy útil tener cuando se llega a un manejador?
+Cuando comparamos con C:
+En C solo tenemos un valor de error (-1, errno) → muy poca información.
+En Java, las excepciones son objetos → llevan información detallada y útil.
+Información que lleva cualquier objeto excepción
+Mensaje del error (getMessage())
+Explica qué ocurrió.
+Ejemplo: "No se admite número negativo".
+Tipo de excepción / clase
+Diferencia entre errores de tipo ArithmeticException, IOException, o nuestras propias excepciones.
+Permite manejarlas de manera específica.
+Pila de llamadas (stack trace) (printStackTrace())
+Muestra dónde ocurrió el error, en qué función y línea.
+Muy útil para depuración.
+Opcional: información extra
+Variables, estado del programa, etc., si la excepción personalizada lo guarda.
+Ventaja principal
+El manejador (catch) tiene toda la información necesaria para:
+Mostrar mensaje claro al usuario
+Depurar errores fácilmente
+Tomar decisiones según el tipo de excepción
+Resumen
+Objeto excepción = mucho más que un valor de error.
+Información esencial que lleva:
+Mensaje descriptivo
+Tipo/clase de excepción
+Pila de llamadas (stack trace)
+Permite manejar errores de forma eficiente y segura, algo que en C no se puede.
+8. En Java, sobre el bloque **"try-catch"**, ¿se pueden tener más de un bloque `catch`? ¿cuántos bloques `catch` se ejecutan?
+¿Se pueden tener varios catch?
+Sí.
+ Un try puede ir seguido de varios bloques catch para manejar distintos tipos de excepciones.
+try {
+    double r = Calculadora.raiz(-4);
+} catch (ArithmeticException e) {
+    System.out.println("Error aritmético");
+} catch (Exception e) {
+    System.out.println("Error general");
+}
+¿Cuántos bloques catch se ejecutan?
+Solo uno.
+Se ejecuta el primero cuya excepción coincida con el tipo lanzado.
+Los demás se ignoran.
+Notas importantes
+Ordena de más específico a más general.
+Si pones primero un catch(Exception) general, los específicos nunca se ejecutarán.
+Resumen para apuntes
+🔹 Sí, varios catch por un mismo try.
+🔹 Solo se ejecuta uno: el primero que coincide.
+🔹 Orden: de específico a general.
+9. Si las excepciones producen rupturas en el código llamador, ¿cómo podemos garantizar que se ejecuta siempre finalmente un código necesario para cierre de ficheros, liberacion de recursos, antes de que continúe propagándose la excepción? Pon un ejemplo en Java con `finally`, tanto con `catch` como sin él.
+Idea principal
+Una excepción interrumpe el flujo normal del programa.
+A veces necesitamos ejecutar código sí o sí, por ejemplo:
+Cerrar archivos
+Liberar recursos
+Cerrar conexiones de red
+Para esto usamos finally, que se ejecuta siempre, incluso si hay o no excepción.
+Ejemplo con catch
+try {
+    double r = Calculadora.raiz(-4);
+    System.out.println("Resultado: " + r);
+} catch (Exception e) {
+    System.out.println("Error: " + e.getMessage());
+} finally {
+    System.out.println("Se cierra recurso o se ejecuta código necesario");
+}
+Qué ocurre:
+raiz(-4) lanza excepción.
+Se ejecuta el bloque catch.
+Siempre se ejecuta finally después del catch.
+Ejemplo sin catch
+try {
+    double r = Calculadora.raiz(-4);
+} finally {
+    System.out.println("Se ejecuta igual, aunque no haya catch");
+}
+Qué ocurre:
+La excepción sigue propagándose a la función que llamó a main.
+Pero el bloque finally se ejecuta antes de que la excepción continúe subiendo.
+Resumen
+finally → bloque que siempre se ejecuta.
+Sirve para:
+Cerrar ficheros
+Liberar recursos
+Ejecutar tareas necesarias antes de que la excepción se propague.
+Se ejecuta:
+Después de try si no hay excepción
+Después de catch si hay excepción
+Incluso si no hay catch
+10. En Java, el bloque `finally` puede ir sin `catch`? ¿Se ejecuta siempre tanto si ocurre como si no ocurre una excepción? ¿Y si hay un `return` en medio del `try`?
+1. ¿Puede ir finally sin catch?
+Sí.
+try {
+    System.out.println("Código en try");
+} finally {
+    System.out.println("Código en finally");
+}
+No hace falta catch.
+finally siempre se ejecuta antes de que la excepción se propague, si la hay.
+2. ¿Se ejecuta siempre?
+Sí.
+Ocurra o no ocurra una excepción, el bloque finally siempre se ejecuta.
+3. ¿Y si hay un return en try?
+Sí, incluso si hay un return:
+public static int prueba() {
+    try {
+        System.out.println("En try");
+        return 1;
+    } finally {
+        System.out.println("En finally");
+    }
+}
+Qué ocurre:
+Se ejecuta System.out.println("En try")
+Se encuentra return 1 → intenta salir del método
+Antes de salir, se ejecuta finally
+Luego el método retorna 1
+🔹 Es decir, finally siempre se ejecuta antes de salir del try, incluso con return.
+Resumen
+finally puede ir sin catch.
+Se ejecuta siempre, con o sin excepción.
+Si hay return en try o catch, finally se ejecuta antes de salir del método.
+11. En Java, qué son las excepciones **"controladas"** y las **"no controladas"**? ¿Qué papel juega `RuntimeException`? Pon un ejemplo de excepciones típicas controladas y no controladas que incluso nosotros mismos podríamos usar. Haz dos listas con 3 o 4 ejemplos de situación donde se suele preferir una excepción controlada y donde se suele preferir una excepción no controlada.
+1. Excepciones controladas (Checked Exceptions)
+Deben declararse con throws o capturarse con try-catch.
+Son errores que se pueden prever y se espera que el programador los maneje.
+Ejemplo: abrir un archivo que puede no existir.
+Clases típicas:
+IOException
+FileNotFoundException
+SQLException
+Ejemplo personalizado:
+class NumeroNegativoException extends Exception { }
+2. Excepciones no controladas (Unchecked Exceptions)
+No es obligatorio declararlas ni capturarlas.
+Son errores de programación, ocurren en tiempo de ejecución.
+Derivan de RuntimeException.
+Clases típicas:
+ArithmeticException
+ArrayIndexOutOfBoundsException
+NullPointerException
+Ejemplo personalizado:
+class ValorInvalidoRuntimeException extends RuntimeException { }
+🔹 Papel de RuntimeException:
+Todas las excepciones no controladas heredan de ella.
+Permite no obligar al programador a capturarlas.
+3. Cuándo usar cada una
+Excepciones controladas (Checked)
+Situaciones previsibles, externas o dependientes del entorno.
+Ejemplos típicos:
+Abrir o leer un archivo (IOException)
+Conexión a base de datos (SQLException)
+Validar entrada del usuario (NumeroNegativoException)
+Operaciones de red (SocketException)
+Excepciones no controladas (Unchecked)
+Situaciones errores de lógica del programador.
+Ejemplos típicos:
+División entre 0 (ArithmeticException)
+Acceso a índice fuera de array (ArrayIndexOutOfBoundsException)
+Referencia nula (NullPointerException)
+Valores inválidos detectados en runtime (ValorInvalidoRuntimeException)
+Resumen para apuntes
+Tipo de excepción	Obliga a declarar o capturar	Ejemplo típico
+Controlada	Sí (throws o try-catch)	"IOException, SQLException"
+No controlada	No	"RuntimeException, ArithmeticException"
+
+
+Idea clave:
+Checked → errores previsibles, externos.
+Unchecked → errores de programación, lógica.
+12. ¿Qué es y para qué se usa `throws`? ¿Por qué es alternativa a capturar una excepción controlada?
+¿Qué es throws?
+Es una palabra clave que se usa en la declaración de un método.
+Indica que el método puede lanzar una o varias excepciones que no se capturan dentro del método.
+public double raiz(double x) throws Exception {
+    if (x < 0) {
+        throw new Exception("Numero negativo");
+    }
+    return Math.sqrt(x);
+}
+¿Para qué se usa?
+Avisar al que llama que el método puede producir una excepción.
+Permitir que el manejo del error se haga fuera del método.
+Es alternativa a capturar la excepción dentro del mismo método con try-catch.
+Ejemplo de uso
+public static void main(String[] args) {
+    try {
+        double r = raiz(-4); // método lanza Exception
+    } catch (Exception e) {
+        System.out.println("Error: " + e.getMessage());
+    }
+}
+raiz no captura la excepción, solo la declara con throws.
+main captura la excepción con try-catch.
+Resumen
+throws = declara excepciones que el método puede lanzar.
+Alternativa a capturarlas dentro del método.
+Permite que el programador que llama decida cómo manejarlas.
+Solo obligatorio para excepciones controladas (checked exceptions).
+13. Pon un ejemplo en Java de firma de método que incluya `throws`, de una función que abre un fichero pero que declara que no le interesa menejar la excepción de si el fichero no existe, sino que se propague hacia arriba. Eso sí, acuérdate del `finally`.
+Ejemplo de método con throws y finally
+Queremos:
+Abrir un fichero.
+No capturar la excepción dentro del método.
+Propagarla hacia el que llama.
+Garantizar que se cierra el recurso siempre.
+Firma del método con throws
+import java.io.*;
+
+class ArchivoUtils {
+
+    public static void abrirArchivo(String nombre) throws IOException {
+        FileReader fr = null;
+
+        try {
+            fr = new FileReader(nombre);   // puede lanzar FileNotFoundException
+            System.out.println("Archivo abierto correctamente");
+
+        } finally {
+            if (fr != null) {
+                try {
+                    fr.close();             // se cierra siempre
+                    System.out.println("Archivo cerrado");
+                } catch (IOException e) {
+                    System.out.println("Error al cerrar el archivo");
+                }
+            }
+        }
+    }
+}
+Uso en main capturando la excepción
+public class Main {
+    public static void main(String[] args) {
+        try {
+            ArchivoUtils.abrirArchivo("datos.txt");
+        } catch (IOException e) {
+            System.out.println("Error al abrir el archivo: " + e.getMessage());
+        }
+    }
+}
+Explicación 
+throws IOException → propaga la excepción hacia quien llama.
+finally → se ejecuta siempre, cerrando el fichero aunque haya error.
+main → captura la excepción y la maneja.
+Resumen
+throws = el método no maneja la excepción, la pasa hacia arriba.
+finally = asegura liberación de recursos siempre.
+Buena práctica en manejo de ficheros y otros recursos externos.
+14. ¿Podemos poner en `throws` excepciones no controladas, como `RuntimeException`? ¿Debería el método llamador entonces poner `try-catch` en ese caso? ¿Qué sentido tendría?
+1. ¿Podemos poner en throws excepciones no controladas?
+Sí, legalmente se puede:
+public void dividir(int a, int b) throws ArithmeticException {
+    int r = a / b;  // puede lanzar ArithmeticException
+}
+Pero no es obligatorio, porque las excepciones no controladas (unchecked) no requieren ser declaradas ni capturadas.
+2. ¿Debería el método llamador poner try-catch?
+No es obligatorio.
+Solo se hace si el llamador quiere controlar el error y evitar que el programa se rompa.
+try {
+    dividir(5, 0);
+} catch (ArithmeticException e) {
+    System.out.println("Error: división por cero");
+}
+Si no se captura → la excepción se propaga y puede terminar el programa.
+3. ¿Qué sentido tendría declararla con throws?
+Documentación / claridad: indica al programador que este método puede fallar con este tipo de error en runtime.
+Opcional, nunca obligatorio para RuntimeException.
+Útil en librerías o APIs para avisar de errores previsibles en tiempo de ejecución.
+Resumen
+Se puede poner RuntimeException en throws, pero no es obligatorio.
+El llamador solo captura si quiere controlar el error.
+Tiene sentido declararlo para documentar el posible fallo, no por obligación del compilador.
+15. ¿Cuándo se recomienda usar excepciones controladas, como `IOException`, y cuándo no controladas como `IllegalArgumentException`? ¿Existen en todos los lenguajes ambas opciones? En los que sólo existe una opción, ¿cuál es la más habitual?
+1. Cuándo usar excepciones controladas (Checked Exceptions)
+Situaciones previsibles y dependientes del entorno, que el programa puede manejar.
+Ejemplos típicos:
+Abrir/leer un archivo → IOException
+Conexión a base de datos → SQLException
+Validación de entrada del usuario → NumeroNegativoException
+Idea: el programador debe decidir cómo actuar ante estas situaciones.
+2. Cuándo usar excepciones no controladas (Unchecked Exceptions)
+Situaciones errores de programación o lógica, que no deberían ocurrir si el código es correcto.
+Ejemplos típicos:
+División entre cero → ArithmeticException
+Índice fuera de rango → ArrayIndexOutOfBoundsException
+Valor inválido detectado en runtime → IllegalArgumentException
+Idea: se usan para detectar fallos de lógica, no para controlar situaciones externas previsibles.
+3. Existen ambas opciones en todos los lenguajes?
+No.
+Java y C# → sí, distinguen controladas y no controladas.
+C/C++ → solo hay una forma de manejar errores (valores de retorno o excepciones no obligatorias).
+Python, JavaScript → solo excepciones no controladas (raise / throw), no obliga a declararlas.
+4. En lenguajes con una sola opción
+La opción más habitual es excepciones no controladas.
+Se asume que el programador decide capturarlas o no.
+Ejemplo: Python → todo es Exception, no se obliga a declarar.
+Resumen 
+Tipo de excepción	Cuándo usar	Obligatorio manejar
+Controlada (IOException)	Situaciones previsibles y externas	Sí
+No controlada (IllegalArgumentException)	Errores de programación o lógica	No
+
+
+No todos los lenguajes tienen ambas.
+En los que solo hay una opción → no controladas son las más habituales.
+16. ¿Tiene sentido lanzar excepciones dentro del `catch`? ¿Se puede relanzar la misma excepción capturada? ¿Cuándo tendría sentido hacer esto último? Pon ejemplos de ambos casos.
+1. ¿Tiene sentido lanzar excepciones dentro de catch?
+Sí.
+Se usa cuando queremos transformar o notificar el error a otro nivel del programa.
+Podemos lanzar una nueva excepción, distinta de la que capturamos, con información más específica.
+Ejemplo: lanzar nueva excepción dentro de catch
+try {
+    double r = Calculadora.raiz(-4);
+} catch (Exception e) {
+    throw new RuntimeException("Error en cálculo de raíz", e);
+}
+La excepción original e se anida dentro de la nueva (RuntimeException).
+Útil para pasar un mensaje más claro al que llama.
+2. ¿Se puede relanzar la misma excepción capturada?
+Sí, usando throw e; dentro del catch.
+Ejemplo: relanzar misma excepción
+try {
+    double r = Calculadora.raiz(-4);
+} catch (Exception e) {
+    System.out.println("Se detectó un error: " + e.getMessage());
+    throw e; // relanzamos para que suba por la pila
+}
+Se captura para registrar o mostrar mensaje y luego se propaga la misma excepción.
+Tiene sentido cuando quieres hacer algo local (log, limpieza parcial) pero no quieres manejar el error completamente, dejando que siga propagándose.
+Resumen
+Caso	Uso principal
+Lanzar nueva excepción dentro de catch	Transformar el error o añadir contexto
+Relanzar la misma excepción (throw e)	"Registrar o hacer acciones parciales, luego dejar que se propague"
+
+
+En ambos casos, la excepción sigue afectando al flujo del programa hasta que alguien la capture o termine el programa.
+17. ¿En qué consiste que una excepción sea la **"causa"** de otra excepción? Pon un ejemplo en Java, donde capturemos una excepción de bajo nivel y la encapsulemos en otra personalizada de alto nivel. Cuando una excepción sale por pantalla y tiene una causa, ¿se ve?
+1. Concepto
+Una excepción puede ser la causa de otra cuando queremos:
+Encapsular un error de bajo nivel dentro de un error de alto nivel.
+Dar más contexto al que llama.
+Se usa al crear una nueva excepción pasando la anterior como parámetro.
+2. Ejemplo en Java
+Supongamos que queremos capturar un error de archivo y convertirlo en una excepción personalizada de nuestra aplicación:
+import java.io.*;
+
+class MiExcepcionAlta extends Exception {
+    public MiExcepcionAlta(String mensaje, Throwable causa) {
+        super(mensaje, causa);
+    }
+}
+
+public class Main {
+    public static void abrirArchivo(String nombre) throws MiExcepcionAlta {
+        try {
+            FileReader fr = new FileReader(nombre); // FileNotFoundException
+        } catch (FileNotFoundException e) {
+            // encapsulamos la excepción de bajo nivel en nuestra excepción de alto nivel
+            throw new MiExcepcionAlta("No se pudo abrir el archivo", e);
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            abrirArchivo("datos.txt");
+        } catch (MiExcepcionAlta e) {
+            e.printStackTrace();  // muestra mensaje + causa
+        }
+    }
+}
+3. Qué se ve cuando se imprime la excepción
+La excepción principal (MiExcepcionAlta) aparece primero.
+Luego se imprime la causa, con su tipo y mensaje original.
+Salida aproximada:
+MiExcepcionAlta: No se pudo abrir el archivo
+    at Main.abrirArchivo(Main.java:10)
+Caused by: java.io.FileNotFoundException: datos.txt (No such file or directory)
+    at java.io.FileReader.<init>(FileReader.java:58)
+    at Main.abrirArchivo(Main.java:8)
+Resumen
+Una excepción puede tener otra excepción como causa (Throwable cause).
+Útil para transformar excepciones de bajo nivel en errores de alto nivel.
+Cuando se imprime, se ve la excepción principal y la causa.
